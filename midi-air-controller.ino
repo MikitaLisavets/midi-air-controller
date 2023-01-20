@@ -7,7 +7,7 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-int start_distance = 10;
+int start_distance = 0;
 int distance_step = 30;
 
 int distance_accuracy = 10;
