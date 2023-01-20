@@ -2,26 +2,26 @@
 #include <RunningMedian.h>
 #include <hcsr04.h>
 
-
-#define TRIG_PIN 9
-#define ECHO_PIN 6
+#define TRIG_PIN 10
+#define ECHO_PIN 9
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-int accuracy = 10;
-RunningMedian distancies = RunningMedian(accuracy);
+int start_distance = 10;
+int distance_step = 30;
+
+int distance_accuracy = 10;
 
 int previous_note = -1;
 int velocity = 64;
 
-int step = 30;
 int scale[] = { 2, 1, 2, 2, 1, 3, 1 };
 int root_note = 48;
 int number_of_notes = 24;
-int start_distance = 10;
+
+RunningMedian distancies = RunningMedian(distance_accuracy);
 
 HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, start_distance, 4000);
-
 
 void noteOn(byte channel, byte pitch, byte velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
@@ -52,7 +52,7 @@ void setup() {
 
 void loop() {
   int i = 0;
-  while (i < accuracy) {
+  while (i < distance_accuracy) {
     distancies.add(hcsr04.distanceInMillimeters());
     delay(4);
     i++;
@@ -65,8 +65,8 @@ void loop() {
   int note = previous_note;
 
   for (int i = 0; i < number_of_notes; i++) {
-    int range_start = start_distance + i * step;
-    int range_end = start_distance + (i + 1) * step;
+    int range_start = start_distance + i * distance_step;
+    int range_end = start_distance + (i + 1) * distance_step;
 
     if (inRange(distance, range_start, range_end)) {
       Serial.println("Distance number: " + String(i));
