@@ -3,7 +3,6 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-// Thread thread_display;
 Thread thread_distance;
 Thread thread_midi;
 Thread thread_controls;
@@ -11,13 +10,13 @@ Thread thread_controls;
 StaticThreadController<3> main_thread (&thread_distance, &thread_midi, &thread_controls);
 
 // === Scales ===
-String note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+char* note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
 int MAJOR_SCALE[] = {2,2,1,2,2,2,1};
-// int NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
-// int HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
-// int HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
-// int MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
+int NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
+int HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
+int HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
+int MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
 // int DORIAN_SCALE[] = {2,1,2,2,2,1,2};
 // int PHRYGIAN_SCALE[] = {1,2,2,2,1,2,2};
 // int LYDIAN_SCALE[] = {2,2,2,1,2,2,1};
@@ -37,11 +36,11 @@ int BLUES_SCALE[] = {3,2,1,1,3,2};
 
 char* scales_names[] = {
   "Major",
-  // "Naturl Minor", 
-  // "Harmonic Major",
-  // "Harmonic Minor"
-  // "Harmonic Major",
-  // "Melodic Minor",
+  "Naturl Minor", 
+  "Harmonic Major",
+  "Harmonic Minor"
+  "Harmonic Major",
+  "Melodic Minor",
   // "Dorian", 
   // "Phrygian",
   // "Lydian",
@@ -62,10 +61,10 @@ char* scales_names[] = {
 
 int* scales_steps[] = {
   MAJOR_SCALE,
-  // NATURAL_MINOR_SCALE,
-  // HARMONIC_MAJOR_SCALE,
-  // HARMONIC_MINOR_SCALE,
-  // MELODIC_MINOR_SCALE,
+  NATURAL_MINOR_SCALE,
+  HARMONIC_MAJOR_SCALE,
+  HARMONIC_MINOR_SCALE,
+  MELODIC_MINOR_SCALE,
   // DORIAN_SCALE,
   // PHRYGIAN_SCALE,
   // LYDIAN_SCALE,
@@ -86,10 +85,10 @@ int* scales_steps[] = {
 
 int scales_sizes[] = {
   ARRAY_SIZE(MAJOR_SCALE),
-  // ARRAY_SIZE(NATURAL_MINOR_SCALE),
-  // ARRAY_SIZE(HARMONIC_MAJOR_SCALE),
-  // ARRAY_SIZE(HARMONIC_MINOR_SCALE),
-  // ARRAY_SIZE(MELODIC_MINOR_SCALE),
+  ARRAY_SIZE(NATURAL_MINOR_SCALE),
+  ARRAY_SIZE(HARMONIC_MAJOR_SCALE),
+  ARRAY_SIZE(HARMONIC_MINOR_SCALE),
+  ARRAY_SIZE(MELODIC_MINOR_SCALE),
   // ARRAY_SIZE(DORIAN_SCALE),
   // ARRAY_SIZE(PHRYGIAN_SCALE),
   // ARRAY_SIZE(LYDIAN_SCALE),
@@ -112,6 +111,7 @@ int scales_sizes[] = {
 // === Global Variables ===
 int global_current_distance = 0;
 int global_current_note = -1;
+int global_note_index = -1;
 
 int global_minimal_distance = 20;
 int global_distance_step = 20;
@@ -140,13 +140,10 @@ bool global_is_pitch = false;
 // =========================
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(11200);
 
   setup_display();
   setup_controls();
-
-  // thread_display.setInterval(500);
-  // thread_display.onRun(loop_display);
 
   thread_distance.setInterval(10);
   thread_distance.onRun(loop_distance);
@@ -154,7 +151,7 @@ void setup() {
   thread_midi.setInterval(100);
   thread_midi.onRun(loop_midi);
 
-  thread_controls.setInterval(50);
+  thread_controls.setInterval(10);
   thread_controls.onRun(loop_controls);
 }
 

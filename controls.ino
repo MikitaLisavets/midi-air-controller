@@ -2,14 +2,14 @@
 #define JOY_Y A1
 #define JOY_SW 7
 
-#define CENTER_VALUE 500
-#define THRESHOLD 250
-
 #define PRESS "PRESS"
 #define UP "UP"
 #define DOWN "DOWN"
 #define LEFT "LEFT"
 #define RIGHT "RIGHT"
+
+int center_value = 500;
+int threshold = 250;
 
 int xValue;
 int yValue;
@@ -93,16 +93,16 @@ void loop_controls() {
   if (buttonState == LOW) {
     handle_button_press();
   }
-  if (xValue >= CENTER_VALUE + THRESHOLD) {
+  if (xValue >= center_value + threshold) {
     handle_press_left();
   }
-  if (xValue <= CENTER_VALUE - THRESHOLD) {
+  if (xValue <= center_value - threshold) {
     handle_press_right();
   }
-  if (yValue >= CENTER_VALUE + THRESHOLD) {
+  if (yValue >= center_value + threshold) {
     handle_press_up();
   }
-  if (yValue <= CENTER_VALUE - THRESHOLD) {
+  if (yValue <= center_value - threshold) {
     handle_press_down();
   }
 

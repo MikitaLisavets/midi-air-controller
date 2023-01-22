@@ -29,7 +29,7 @@ int getNoteOffset(int note_index) {
 
   for (int i = 0; i < note_index; i++) {
     int scale_step_index = i % scales_sizes[global_current_scale_index];
-    int scale_step = scales_steps[global_current_scale_index][scale_step_index]; // MAJOR_SCALE[scale_step_index]; //get_scale_step(scale_step_index);
+    int scale_step = scales_steps[global_current_scale_index][scale_step_index];
     offset = offset + scale_step;
   }
 
@@ -50,6 +50,7 @@ int get_note(int distance) {
         int offset = getNoteOffset(i);
         note = global_root_note + offset;
       }
+      global_note_index = i;
       break;
     } else {
       note = -1;
@@ -60,26 +61,30 @@ int get_note(int distance) {
 }
 
 void play_note(int note) {
-  if (global_is_pitch) {
-    // int pitchBendVal = map(note, global_root_note , , 0, 127)
-      //rangedVal[i] = map(scaledVal[i], IR_range[0], IR_range[1], IR_min_val[i], IR_max_val[i]);
-    pitch_bend(global_midi_channel, note);
+  if (note == -1) {
+    note_off(global_midi_channel, global_previous_note, global_velocity);
+
+    global_previous_note = note;
+
     MidiUSB.flush();
-  } else {
-    if (note == -1) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+  } else if (global_previous_note != note) {
+    note_off(global_midi_channel, global_previous_note, global_velocity);
 
-      global_previous_note = note;
+    global_previous_note = note;
 
-      MidiUSB.flush();
-    } else if (global_previous_note != note) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+    note_on(global_midi_channel, note, global_velocity);
+    MidiUSB.flush();
+  }
+  if (global_is_pitch) {
+    // TO-DO
+    // int pitchBendVal = map(global_current_distance, (global_note_index * global_distance_step) - global_distance_step, (global_note_index * global_distance_step) + global_distance_step, 0, 16383);
+    // Serial.println("global_current_distance " + String(global_current_distance));
+    // Serial.println("from " + String( (global_note_index * global_distance_step) - global_distance_step));
+    // Serial.println("to " + String( (global_note_index * global_distance_step) + global_distance_step));
 
-      global_previous_note = note;
-
-      note_on(global_midi_channel, note, global_velocity);
-      MidiUSB.flush();
-    }
+    // Serial.println("pitchBendVal " + String(pitchBendVal));
+    // pitch_bend(global_midi_channel, pitchBendVal);
+    // MidiUSB.flush();
   }
 }
 

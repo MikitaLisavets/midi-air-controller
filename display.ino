@@ -39,11 +39,11 @@ void render_display(int current_distance, int current_note, int root_note, int s
   display.setTextSize(1);
   display.setTextColor(WHITE);
 
-  display.print("D: " + String(current_distance));
-  String current_note_name = get_note_name(current_note);
-  String right_text = "N: " + String(current_note_name);
-  display.setCursor(SCREEN_WIDTH - (right_text.length() * font_width), 0);
-  display.print(right_text);
+  display.print("D: ");
+  display.print(current_distance);
+  display.print(" | ");
+  display.print("N: ");
+  display.println(get_note_name(current_note));
   display.println("---------------------");
 
   if (selected_row == 0) {
@@ -51,51 +51,41 @@ void render_display(int current_distance, int current_note, int root_note, int s
   } else {
     style_default_row();
   }
-  String root_note_name = get_note_name(root_note);
-  display.println("Root note: " + root_note_name);
+  display.print("Root note: ");
+  display.println(get_note_name(root_note));
 
   if (selected_row == 1) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  String scale_name = get_scale_name(scale_index);
-  display.println("Scale: " + scale_name);
+  display.print("Scale: ");
+  display.println(get_scale_name(scale_index));
 
   if (selected_row == 2) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.println("Notes: " + String(number_of_notes));
+  display.print("Notes: ");
+  display.println(number_of_notes);
 
   if (selected_row == 3) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.println("MIDI Channel: " + String(midi_channel));
+  display.print("MIDI Channel: ");
+  display.println(midi_channel);
 
   if (selected_row == 4) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  String type = is_pitch ? "Pitch" : "Step";
-  display.println("Type: " + type);
+  char* type = is_pitch ? "Pitch" : "Step";
+  display.print("Type: ");
+  display.println(type);
 
   display.display();
-}
-
-void loop_display() {
-  // render_display(
-  //   global_current_distance,
-  //   global_current_note,
-  //   global_root_note,
-  //   global_current_scale_index,
-  //   global_number_of_notes,
-  //   global_midi_channel,
-  //   global_is_pitch,
-  //   global_selected_row
-  // );
 }
