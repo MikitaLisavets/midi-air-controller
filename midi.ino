@@ -1,26 +1,14 @@
 #include "MIDIUSB.h"
 
-#define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
+int scale_size;
+int* scale_steps;
 
-int MAJOR_SCALE[] = {2,2,1,2,2,2,1};
-int CHROMATIC_SCALE[] = {1,1,1,1,1,1,1,1,1,1,1,1};
-
-String scales_names[] = {"Major", "Chromatic"};
-int* scales_steps[] = {MAJOR_SCALE, CHROMATIC_SCALE};
-int scales_sizes[] = {7, 12};
-
-int start_distance = 20;
-int distance_step = 50;
-
-int previous_note = -1;
-int velocity = 64;
-
-int current_scale_index = 0;
-
-int root_note = 48;
-int number_of_notes = 8;
-
-String note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+void pitch_bend(byte channel, int value) {
+  byte lowValue = value & 0x7F;
+  byte highValue = value >> 7;
+  midiEventPacket_t pitchBend = {0x0E, 0xE0 | channel, lowValue, highValue};
+  MidiUSB.sendMIDI(pitchBend);
+}
 
 void note_on(byte channel, byte pitch, byte velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
@@ -32,38 +20,35 @@ void note_off(byte channel, byte pitch, byte velocity) {
   MidiUSB.sendMIDI(noteOff);
 }
 
-void send_midi() {
-  MidiUSB.flush();
-}
-
 bool inRange(int val, int minimum, int maximum) {
   return ((minimum <= val) && (val < maximum));
 }
 
 int getNoteOffset(int note_index) {
   int offset = 0;
+
   for (int i = 0; i < note_index; i++) {
-    int scale_step_index = i % scales_sizes[current_scale_index];
-    int scale_offset = scales_steps[current_scale_index][scale_step_index];
-    offset = offset + scale_offset;
+    int scale_step_index = i % scales_sizes[global_current_scale_index];
+    int scale_step = scales_steps[global_current_scale_index][scale_step_index]; // MAJOR_SCALE[scale_step_index]; //get_scale_step(scale_step_index);
+    offset = offset + scale_step;
   }
 
   return offset;
 } 
 
 int get_note(int distance) {
-  int note = previous_note;
+  int note = global_previous_note;
 
-  for (int i = 0; i < number_of_notes; i++) {
-    int range_start = start_distance + i * distance_step;
-    int range_end = start_distance + (i + 1) * distance_step;
+  for (int i = 0; i < global_number_of_notes; i++) {
+    int range_start = global_minimal_distance + i * global_distance_step;
+    int range_end = global_minimal_distance + (i + 1) * global_distance_step;
 
     if (inRange(distance, range_start, range_end)) {
       if (i == 0) {
-        note = root_note;
+        note = global_root_note;
       } else {
         int offset = getNoteOffset(i);
-        note = root_note + offset;
+        note = global_root_note + offset;
       }
       break;
     } else {
@@ -75,19 +60,26 @@ int get_note(int distance) {
 }
 
 void play_note(int note) {
-  if (note == -1) {
-    note_off(0, previous_note, velocity);
+  if (global_is_pitch) {
+    // int pitchBendVal = map(note, global_root_note , , 0, 127)
+      //rangedVal[i] = map(scaledVal[i], IR_range[0], IR_range[1], IR_min_val[i], IR_max_val[i]);
+    pitch_bend(global_midi_channel, note);
+    MidiUSB.flush();
+  } else {
+    if (note == -1) {
+      note_off(global_midi_channel, global_previous_note, global_velocity);
 
-    previous_note = note;
+      global_previous_note = note;
 
-    send_midi();
-  } else if (previous_note != note) {
-    note_off(0, previous_note, velocity);
+      MidiUSB.flush();
+    } else if (global_previous_note != note) {
+      note_off(global_midi_channel, global_previous_note, global_velocity);
 
-    previous_note = note;
+      global_previous_note = note;
 
-    note_on(0, note, velocity);
-    send_midi();
+      note_on(global_midi_channel, note, global_velocity);
+      MidiUSB.flush();
+    }
   }
 }
 
@@ -95,7 +87,7 @@ String get_note_name(int note) {
   if (note == -1) {
     return "-";
   } else {
-    return note_names[note % 12];
+    return note_names[note % 12] + String(round(note / 12));
   }
 }
 
@@ -103,22 +95,42 @@ String get_scale_name(int index) {
   return scales_names[index];
 }
 
-int get_number_of_scales() {
-  return ARRAY_SIZE(scales_names);
-}
-
-int get_root_note() {
-  return root_note;
-}
-
 void set_root_note(int note) {
-  root_note = abs(note) % 127;
-}
+  if (note < 0) {
+    note = global_max_note;
+  }
 
-int get_current_scale_index() {
-  return current_scale_index;
+  global_root_note = note % global_max_note;
 }
 
 void set_current_scale_index(int index) {
-  current_scale_index = abs(index) % get_number_of_scales();
+  if (index < 0) {
+    index = global_number_of_scales;
+  }
+  global_current_scale_index = index % global_number_of_scales;
+}
+
+void set_number_of_notes(int number) {
+  if (number < 0) {
+    number = global_max_number_of_notes;
+  }
+
+  global_number_of_notes = number % global_max_number_of_notes;
+}
+
+void set_midi_channel(int channel) {
+  if (channel < 0) {
+    channel = global_max_midi_channel;
+  }
+
+  global_midi_channel = channel % global_max_midi_channel;
+}
+
+void set_is_pitch(bool is_pitch) {
+  global_is_pitch = is_pitch;
+}
+
+void loop_midi() {
+  global_current_note = get_note(global_current_distance);
+  play_note(global_current_note);
 }
