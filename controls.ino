@@ -15,7 +15,7 @@ int xValue;
 int yValue;
 bool buttonState;
 
-String control_status = "NONE";
+char* control_status = "NONE";
 
 void setup_controls() {
   pinMode(JOY_SW, INPUT_PULLUP);
@@ -23,12 +23,10 @@ void setup_controls() {
 
 void handle_button_press() {
   control_status = PRESS;
-  Serial.println("Event: PRESS");
 }
 
 void handle_press_right() {
   control_status = RIGHT;
-  Serial.println("Event: RIGHT");
 
   switch (global_selected_row) {
     case 0:
@@ -46,12 +44,14 @@ void handle_press_right() {
     case 4:
         set_is_pitch(!global_is_pitch);
         break;
+    case 5:
+        set_distance_step(global_distance_step + 1);
+        break;
   }
 }
 
 void handle_press_left() {
   control_status = LEFT;
-  Serial.println("Event: LEFT");
 
   switch (global_selected_row) {
     case 0:
@@ -69,19 +69,20 @@ void handle_press_left() {
     case 4:
         set_is_pitch(!global_is_pitch);
         break;
+    case 5:
+        set_distance_step(global_distance_step - 1);
+        break;
   }
 
 }
 
 void handle_press_up() {
   control_status = UP;
-  Serial.println("Event: UP");
   set_selected_row(global_selected_row - 1);
 }
 
 void handle_press_down() {
   control_status = DOWN;
-  Serial.println("Event: DOWN");
   set_selected_row(global_selected_row + 1);
 }
 

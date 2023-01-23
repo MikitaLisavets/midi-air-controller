@@ -23,16 +23,8 @@ void style_default_row() {
   display.setTextColor(WHITE);
 }
 
-void set_selected_row(int row) {
-  if (row < 0) {
-    row = global_max_rows + row;
-  }
-
-  global_selected_row = row % global_max_rows;
-}
-
-void render_display(int current_distance, int current_note, int root_note, int scale_index, int number_of_notes, int midi_channel, bool is_pitch, int selected_row) {
-  int font_width = 6;
+void render_display(byte current_distance, byte current_note, byte root_note, byte scale_index, byte number_of_notes, byte midi_channel, bool is_pitch, byte selected_row) {
+  byte font_width = 6;
   
   display.clearDisplay();
   display.setCursor(0, 0);
@@ -86,6 +78,14 @@ void render_display(int current_distance, int current_note, int root_note, int s
   char* type = is_pitch ? "Pitch" : "Step";
   display.print("Type: ");
   display.println(type);
+
+  if (selected_row == 5) {
+    style_selected_row();
+  } else {
+    style_default_row();
+  }
+  display.print("Distance step: ");
+  display.println(global_distance_step);
 
   display.display();
 }

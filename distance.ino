@@ -12,7 +12,7 @@ RunningMedian distancies = RunningMedian(DISTANCE_ACCURACY);
 HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, global_minimal_distance, 4000);
 
 int getDistance() {
-  int i = 0;
+  // int i = 0;
 
   // while (i < DISTANCE_ACCURACY) {
   //   distancies.add(hcsr04.distanceInMillimeters());

@@ -1,9 +1,6 @@
 #include "MIDIUSB.h"
 
-int scale_size;
-int* scale_steps;
-
-void pitch_bend(byte channel, int value) {
+void pitch_bend(byte channel, byte value) {
   byte lowValue = value & 0x7F;
   byte highValue = value >> 7;
   midiEventPacket_t pitchBend = {0x0E, 0xE0 | channel, lowValue, highValue};
@@ -24,22 +21,22 @@ bool inRange(int val, int minimum, int maximum) {
   return ((minimum <= val) && (val < maximum));
 }
 
-int getNoteOffset(int note_index) {
-  int offset = 0;
+byte getNoteOffset(byte note_index) {
+  byte offset = 0;
 
-  for (int i = 0; i < note_index; i++) {
-    int scale_step_index = i % scales_sizes[global_current_scale_index];
-    int scale_step = scales_steps[global_current_scale_index][scale_step_index];
+  for (byte i = 0; i < note_index; i++) {
+    byte scale_step_index = i % scales_sizes[global_current_scale_index];
+    byte scale_step = scales_steps[global_current_scale_index][scale_step_index];
     offset = offset + scale_step;
   }
 
   return offset;
 } 
 
-int get_note(int distance) {
-  int note = global_previous_note;
+byte get_note(int distance) {
+  byte note = global_previous_note;
 
-  for (int i = 0; i < global_number_of_notes; i++) {
+  for (byte i = 0; i < global_number_of_notes; i++) {
     int range_start = global_minimal_distance + i * global_distance_step;
     int range_end = global_minimal_distance + (i + 1) * global_distance_step;
 
@@ -47,7 +44,7 @@ int get_note(int distance) {
       if (i == 0) {
         note = global_root_note;
       } else {
-        int offset = getNoteOffset(i);
+        byte offset = getNoteOffset(i);
         note = global_root_note + offset;
       }
       global_note_index = i;
@@ -60,8 +57,8 @@ int get_note(int distance) {
   return note;
 }
 
-void play_note(int note) {
-  if (note == -1) {
+void play_note(byte note) {
+  if (note == 0) {
     note_off(global_midi_channel, global_previous_note, global_velocity);
 
     global_previous_note = note;
@@ -75,7 +72,7 @@ void play_note(int note) {
     note_on(global_midi_channel, note, global_velocity);
     MidiUSB.flush();
   }
-  if (global_is_pitch) {
+  // if (global_is_pitch) {
     // TO-DO
     // int pitchBendVal = map(global_current_distance, (global_note_index * global_distance_step) - global_distance_step, (global_note_index * global_distance_step) + global_distance_step, 0, 16383);
     // Serial.println("global_current_distance " + String(global_current_distance));
@@ -85,18 +82,18 @@ void play_note(int note) {
     // Serial.println("pitchBendVal " + String(pitchBendVal));
     // pitch_bend(global_midi_channel, pitchBendVal);
     // MidiUSB.flush();
-  }
+  // }
 }
 
 String get_note_name(int note) {
-  if (note == -1) {
+  if (note == 0) {
     return "-";
   } else {
     return note_names[note % 12] + String(round(note / 12));
   }
 }
 
-String get_scale_name(int index) {
+char* get_scale_name(int index) {
   return scales_names[index];
 }
 
@@ -106,33 +103,6 @@ void set_root_note(int note) {
   }
 
   global_root_note = note % global_max_note;
-}
-
-void set_current_scale_index(int index) {
-  if (index < 0) {
-    index = global_number_of_scales;
-  }
-  global_current_scale_index = index % global_number_of_scales;
-}
-
-void set_number_of_notes(int number) {
-  if (number < 0) {
-    number = global_max_number_of_notes;
-  }
-
-  global_number_of_notes = number % global_max_number_of_notes;
-}
-
-void set_midi_channel(int channel) {
-  if (channel < 0) {
-    channel = global_max_midi_channel;
-  }
-
-  global_midi_channel = channel % global_max_midi_channel;
-}
-
-void set_is_pitch(bool is_pitch) {
-  global_is_pitch = is_pitch;
 }
 
 void loop_midi() {
