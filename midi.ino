@@ -26,11 +26,11 @@ bool inRange(int val, int minimum, int maximum) {
   return ((minimum <= val) && (val < maximum));
 }
 
-byte getNoteOffset(byte note_index) {
-  byte offset = 0;
+int getNoteOffset(byte note_index) {
+  int offset = 0;
 
   for (byte i = 0; i < note_index; i++) {
-    byte scale_step_index = i % pgm_read_byte(&scales_sizes[global_current_scale_index]);
+    byte scale_step_index = i % scales_sizes[global_current_scale_index];
     byte scale_step = scales_steps[global_current_scale_index][scale_step_index];
     offset = offset + scale_step;
   }
@@ -38,8 +38,8 @@ byte getNoteOffset(byte note_index) {
   return offset;
 } 
 
-byte get_note(int distance) {
-  byte note = global_previous_note;
+int get_note(int distance) {
+  int note = global_previous_note;
 
   for (byte i = 0; i < global_number_of_notes; i++) {
     int range_start = global_min_distance + i * global_distance_step;
@@ -49,7 +49,7 @@ byte get_note(int distance) {
       if (i == 0) {
         note = global_root_note;
       } else {
-        byte offset = getNoteOffset(i);
+        int offset = getNoteOffset(i);
         note = global_root_note + offset;
       }
       global_note_index = i;
@@ -62,41 +62,43 @@ byte get_note(int distance) {
   return note;
 }
 
-void play_midi(byte note) {
-  if (global_mode == 0) {
-    if (note == 0) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+void play_midi(int note) {
+  if (global_mode == MODE_NOTE) {
+    if (global_previous_note != note) {
+      if (note == -1) {
+        note_off(global_midi_channel, global_previous_note, global_velocity);
 
-      global_previous_note = note;
+        global_previous_note = note;
 
-      MidiUSB.flush();
-    } else if (global_previous_note != note) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+        MidiUSB.flush();
+      } else if (global_previous_note != note) {
+        note_off(global_midi_channel, global_previous_note, global_velocity);
 
-      global_previous_note = note;
+        global_previous_note = note;
 
-      note_on(global_midi_channel, note, global_velocity);
-      MidiUSB.flush();
+        note_on(global_midi_channel, note, global_velocity);
+        MidiUSB.flush();
+      }
     }
-  } else if (global_mode == 1) {
-    byte value = map(global_current_distance, global_min_distance, (global_min_distance + global_distance_step * global_number_of_notes), 0, 127);
-    control_change(global_midi_channel, global_control_channel, value);    
-  }
-  // if (global_is_pitch) {
-    // TO-DO
-    // int pitchBendVal = map(global_current_distance, (global_note_index * global_distance_step) - global_distance_step, (global_note_index * global_distance_step) + global_distance_step, 0, 16383);
-    // Serial.println("global_current_distance " + String(global_current_distance));
-    // Serial.println("from " + String( (global_note_index * global_distance_step) - global_distance_step));
-    // Serial.println("to " + String( (global_note_index * global_distance_step) + global_distance_step));
+  } else if (global_mode == MODE_VALUE || global_mode == MODE_VALUE_INVERTED) {
+    int value = global_current_distance < global_min_distance ? global_min_distance : global_current_distance;
 
-    // Serial.println("pitchBendVal " + String(pitchBendVal));
-    // pitch_bend(global_midi_channel, pitchBendVal);
-    // MidiUSB.flush();
-  // }
+    global_current_control_value = map(value, global_min_distance, global_max_distance, global_mode == MODE_VALUE ? 0 : 127,  global_mode == MODE_VALUE ? 127 : 0);
+
+    if (global_current_control_value == 0 && global_mode == MODE_VALUE || global_current_control_value == 127 && global_mode == MODE_VALUE_INVERTED) {
+      global_current_control_value = global_previous_control_value;
+    }
+
+    if (global_previous_control_value != global_current_control_value) {
+      global_previous_control_value = global_current_control_value;
+      control_change(global_midi_channel, global_control_channel, global_current_control_value);
+      MidiUSB.flush();  
+    }
+  }
 }
 
 String get_note_name(int note) {
-  if (note == 0) {
+  if (note == -1) {
     return "-";
   } else {
     return note_names[note % 12] + String(round(note / 12));

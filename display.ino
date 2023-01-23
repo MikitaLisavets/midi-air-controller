@@ -32,10 +32,21 @@ void render_display() {
   display.setTextColor(WHITE);
 
   display.print(F("Dest: "));
-  display.print(global_current_distance);
+  if (global_current_distance == -1) {
+    display.print(F("-"));    
+  } else {
+    display.print(global_current_distance);
+  }
   display.print(F(" | "));
-  display.print(F("Note: "));
-  display.println(get_note_name(global_current_note));
+
+  if (global_mode == MODE_NOTE) {
+    display.print(F("Note: "));
+    display.println(get_note_name(global_current_note));
+  } else if (global_mode == MODE_VALUE || global_mode == MODE_VALUE_INVERTED) {
+    display.print(F("Val: "));
+    display.println(global_current_control_value);
+  }
+
   display.println(F("---------------------"));
 
   if (global_selected_row == 0) {

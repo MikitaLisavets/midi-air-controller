@@ -30,20 +30,19 @@ byte AHAVA_RABA_SCALE[] = {1,3,1,2,1,2,2};
 byte PENTATONIC_MAJOR_SCALE[] = {2,2,3,2,3};
 byte PENTATONIC_MINOR_SCALE[] = {3,2,2,3,2};
 byte BLUES_SCALE[] = {3,2,1,1,3,2};
-byte WHOLE_TONE_SCALE[] = {2,2,2,2,2,2};
-byte DIMINISHED_SCALE[] = {1,2,1,2,1,2,1,2};
-byte WHOLE_HALF_DIMINISHED_SCALE[] = {2,1,2,1,2,1,2,1};
+byte WHOLE_TONE_SCALE[] = {2};
+byte DIMINISHED_SCALE[] = {1,2};
+byte WHOLE_HALF_DIMINISHED_SCALE[] = {2,1};
 byte BEBOP_DOMINANT_SCALE[] = {2,2,1,2,2,1,1,1};
 byte BEBOP_MAJOR_SCALE[] = {2,2,1,2,1,1,2,1};
 byte HUNGARIAN_MINOR_SCALE[] = {2,1,3,1,1,3,1};
-byte CHROMATIC_SCALE[] = {1,1,1,1,1,1,1,1,1,1,1,1};
+byte CHROMATIC_SCALE[] = {1};
 
-char* scales_names[] = {
+const char* scales_names[] = {
   "Major",
   "Natural Min", 
   "Harmonic Maj",
   "Harmonic Min",
-  "Harmonic Maj",
   "Melodic Min",
   "Dorian", 
   "Phrygian",
@@ -63,7 +62,7 @@ char* scales_names[] = {
   "Chromatic"
 };
 
-byte* scales_steps[] = {
+const byte* scales_steps[] = {
   MAJOR_SCALE,
   NATURAL_MINOR_SCALE,
   HARMONIC_MAJOR_SCALE,
@@ -87,7 +86,7 @@ byte* scales_steps[] = {
   CHROMATIC_SCALE
 };
 
-const uint8_t scales_sizes[] PROGMEM = {
+const byte scales_sizes[] = {
   ARRAY_SIZE(MAJOR_SCALE),
   ARRAY_SIZE(NATURAL_MINOR_SCALE),
   ARRAY_SIZE(HARMONIC_MAJOR_SCALE),
@@ -113,35 +112,37 @@ const uint8_t scales_sizes[] PROGMEM = {
 // ==============
 
 // === Global Variables ===
-byte global_current_distance = 0;
-byte global_current_note = 0;
-byte global_note_index = -1;
+int global_current_distance = 0;
+int global_current_note = -1;
+int global_note_index = -1;
+int global_previous_note = -1;
 
-int global_min_distance = 20;
-int global_max_distance = 4000;
+int global_previous_control_value = 0;
+int global_current_control_value = 0;
+
+int global_number_of_notes = 14;
+int global_max_number_of_notes = 96;
+
 int global_distance_step = 20;
+int global_min_distance = 15;
+int global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 
-byte global_previous_note = 0;
-
-byte global_velocity = 64;
+int global_velocity = 64;
 int global_midi_channel = 0;
-byte global_max_midi_channel = 127;
+int global_max_midi_channel = 127;
 
 int global_current_scale_index = 0;
 
-byte global_root_note = 48;
-byte global_max_note = 127;
+int global_root_note = 36;
+int global_max_note = 127;
 
-int global_number_of_notes = 14;
-byte global_max_number_of_notes = 96;
-
-byte global_number_of_scales = ARRAY_SIZE(scales_names);
+int global_number_of_scales = ARRAY_SIZE(scales_names);
 
 int global_selected_row = 0;
-byte global_max_rows = 6;
+int global_max_rows = 6;
 
 int global_mode = 0;
-byte global_max_modes = 3;
+int global_max_modes = 3;
 
 int global_control_channel = 0;
 

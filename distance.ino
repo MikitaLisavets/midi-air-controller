@@ -4,7 +4,7 @@
 #define TRIG_PIN 10
 #define ECHO_PIN 9
 
-#define DISTANCE_ACCURACY 10
+#define DISTANCE_ACCURACY 5
 #define DISTANCE_CHECK_TIMEOUT 4
 
 RunningMedian distancies = RunningMedian(DISTANCE_ACCURACY);
