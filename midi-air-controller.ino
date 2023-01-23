@@ -112,6 +112,8 @@ const byte scales_sizes[] = {
 // ==============
 
 // === Global Variables ===
+int global_dynamic_distance = 0;
+
 int global_current_distance = 0;
 int global_current_note = -1;
 int global_note_index = -1;
@@ -127,6 +129,9 @@ int global_distance_step = 15;
 int global_min_distance = 20;
 int global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 
+int global_min_pitch_value = 0;
+int global_pitch_value = 0;
+int global_max_pitch_value = 127;
 int global_velocity = 64;
 int global_midi_channel = 0;
 int global_max_midi_channel = 127;

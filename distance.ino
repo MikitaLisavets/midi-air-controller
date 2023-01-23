@@ -8,9 +8,9 @@
 
 RunningMedian distancies = RunningMedian(DISTANCE_ACCURACY);
 
-HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, global_min_distance, 9999);
+HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, 0, 9999);
 
 void loop_distance() {
   distancies.add(hcsr04.distanceInMillimeters());
-  global_current_distance = round(distancies.getMedian());
+  global_dynamic_distance = round(distancies.getMedian());
 }

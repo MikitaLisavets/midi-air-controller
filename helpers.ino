@@ -47,10 +47,34 @@ void set_mode(int mode) {
   global_mode = mode % global_max_modes;
 }
 
+void set_root_note(int note) {
+  if (note < 0) {
+    note = global_max_note;
+  }
+
+  global_root_note = note % global_max_note;
+}
+
 char* get_mode_name(int mode) {
   switch(mode) {
     case MODE_NOTE: return "Note";
     case MODE_VALUE: return "Value";
     case MODE_VALUE_INVERTED: return "Value (inv)";
   }
+}
+
+String get_note_name(int note) {
+  if (note == -1) {
+    return "-";
+  } else {
+    return note_names[note % 12] + String(round(note / 12));
+  }
+}
+
+char* get_scale_name(int index) {
+  return scales_names[index];
+}
+
+bool inRange(int val, int minimum, int maximum) {
+  return ((minimum <= val) && (val < maximum));
 }

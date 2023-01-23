@@ -1,12 +1,5 @@
 #include "MIDIUSB.h"
 
-void pitch_bend(byte channel, byte value) {
-  byte lowValue = value & 0x7F;
-  byte highValue = value >> 7;
-  midiEventPacket_t pitchBend = {0x0E, 0xE0 | channel, lowValue, highValue};
-  MidiUSB.sendMIDI(pitchBend);
-}
-
 void note_on(byte channel, byte pitch, byte velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
   MidiUSB.sendMIDI(noteOn);
@@ -20,10 +13,6 @@ void note_off(byte channel, byte pitch, byte velocity) {
 void control_change(byte channel, byte control, byte value) {
   midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
   MidiUSB.sendMIDI(event);
-}
-
-bool inRange(int val, int minimum, int maximum) {
-  return ((minimum <= val) && (val < maximum));
 }
 
 int getNoteOffset(byte note_index) {
@@ -62,24 +51,28 @@ int get_note(int distance) {
   return note;
 }
 
+void play_note(int note) {
+  if (global_previous_note != note) {
+    if (note == -1) {
+      note_off(global_midi_channel, global_previous_note, global_velocity);
+
+      global_previous_note = note;
+
+      MidiUSB.flush();
+    } else if (global_previous_note != note) {
+      note_off(global_midi_channel, global_previous_note, global_velocity);
+
+      global_previous_note = note;
+
+      note_on(global_midi_channel, note, global_velocity);
+      MidiUSB.flush();
+    }
+  }
+}
+
 void play_midi(int note) {
   if (global_mode == MODE_NOTE) {
-    if (global_previous_note != note) {
-      if (note == -1) {
-        note_off(global_midi_channel, global_previous_note, global_velocity);
-
-        global_previous_note = note;
-
-        MidiUSB.flush();
-      } else if (global_previous_note != note) {
-        note_off(global_midi_channel, global_previous_note, global_velocity);
-
-        global_previous_note = note;
-
-        note_on(global_midi_channel, note, global_velocity);
-        MidiUSB.flush();
-      }
-    }
+    play_note(note);
   } else if (global_mode == MODE_VALUE || global_mode == MODE_VALUE_INVERTED) {
     int value;
 
@@ -105,27 +98,8 @@ void play_midi(int note) {
   }
 }
 
-String get_note_name(int note) {
-  if (note == -1) {
-    return "-";
-  } else {
-    return note_names[note % 12] + String(round(note / 12));
-  }
-}
-
-char* get_scale_name(int index) {
-  return scales_names[index];
-}
-
-void set_root_note(int note) {
-  if (note < 0) {
-    note = global_max_note;
-  }
-
-  global_root_note = note % global_max_note;
-}
-
 void loop_midi() {
+  global_current_distance = global_dynamic_distance;
   global_current_note = get_note(global_current_distance);
   play_midi(global_current_note);
 }

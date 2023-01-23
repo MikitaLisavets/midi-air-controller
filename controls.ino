@@ -9,7 +9,7 @@
 #define PRESS 5
 #define NONE 0
 
-#define TIMER_TIMEOUT 200
+#define TIMER_TIMEOUT 300
 
 #define CENTER_VALUE 500
 #define THRESHOLD 250
