@@ -5,23 +5,23 @@
 #define ECHO_PIN 9
 
 #define DISTANCE_ACCURACY 10
-#define DISTANCE_CHECK_TIMEOUT 5
+#define DISTANCE_CHECK_TIMEOUT 4
 
 RunningMedian distancies = RunningMedian(DISTANCE_ACCURACY);
 
-HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, global_minimal_distance, 4000);
+HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, global_min_distance, global_max_distance);
 
 int getDistance() {
-  // int i = 0;
+  byte i = 0;
 
-  // while (i < DISTANCE_ACCURACY) {
-  //   distancies.add(hcsr04.distanceInMillimeters());
-  //   delay(DISTANCE_CHECK_TIMEOUT);
-  //   i++;
-  // }
+  while (i < DISTANCE_ACCURACY) {
+    distancies.add(hcsr04.distanceInMillimeters());
+    delay(DISTANCE_CHECK_TIMEOUT);
+    i++;
+  }
 
-  int distance = hcsr04.distanceInMillimeters();
-  // int distance = round(distancies.getMedian());
+  // int distance = hcsr04.distanceInMillimeters();
+  int distance = round(distancies.getMedian());
 
   return distance;
 }

@@ -1,4 +1,4 @@
-void set_selected_row(byte row) {
+void set_selected_row(int row) {
   if (row < 0) {
     row = global_max_rows + row;
   }
@@ -6,7 +6,7 @@ void set_selected_row(byte row) {
   global_selected_row = row % global_max_rows;
 }
 
-void set_current_scale_index(byte index) {
+void set_current_scale_index(int index) {
   if (index < 0) {
     index = global_number_of_scales - 1;
   }
@@ -21,7 +21,7 @@ void set_number_of_notes(int number) {
   global_number_of_notes = number % global_max_number_of_notes;
 }
 
-void set_midi_channel(byte channel) {
+void set_midi_channel(int channel) {
   if (channel < 0) {
     channel = global_max_midi_channel - 1;
   }
@@ -37,6 +37,18 @@ void set_distance_step(int step) {
   global_distance_step = step;
 }
 
-void set_is_pitch(bool is_pitch) {
-  global_is_pitch = is_pitch;
+void set_mode(int mode) {
+  if (mode < 0) {
+    mode = global_max_modes - 1;
+  }
+
+  global_mode = mode % global_max_modes;
+}
+
+char* get_mode_name(int mode) {
+  switch(mode) {
+    case MODE_NOTE: return "Note";
+    case MODE_VALUE: return "Value";
+    case MODE_VALUE_INVERTED: return "Value (inv)";
+  }
 }

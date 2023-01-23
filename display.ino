@@ -23,7 +23,7 @@ void style_default_row() {
   display.setTextColor(WHITE);
 }
 
-void render_display(byte current_distance, byte current_note, byte root_note, byte scale_index, byte number_of_notes, byte midi_channel, bool is_pitch, byte selected_row) {
+void render_display() {
   byte font_width = 6;
   
   display.clearDisplay();
@@ -31,60 +31,59 @@ void render_display(byte current_distance, byte current_note, byte root_note, by
   display.setTextSize(1);
   display.setTextColor(WHITE);
 
-  display.print("D: ");
-  display.print(current_distance);
-  display.print(" | ");
-  display.print("N: ");
-  display.println(get_note_name(current_note));
-  display.println("---------------------");
+  display.print(F("Dest: "));
+  display.print(global_current_distance);
+  display.print(F(" | "));
+  display.print(F("Note: "));
+  display.println(get_note_name(global_current_note));
+  display.println(F("---------------------"));
 
-  if (selected_row == 0) {
+  if (global_selected_row == 0) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print("Root note: ");
-  display.println(get_note_name(root_note));
+  display.print(F("Root note: "));
+  display.println(get_note_name(global_root_note));
 
-  if (selected_row == 1) {
+  if (global_selected_row == 1) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print("Scale: ");
-  display.println(get_scale_name(scale_index));
+  display.print(F("Scale: "));
+  display.println(get_scale_name(global_current_scale_index));
 
-  if (selected_row == 2) {
+  if (global_selected_row == 2) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print("Notes: ");
-  display.println(number_of_notes);
+  display.print(F("Notes: "));
+  display.println(global_number_of_notes);
 
-  if (selected_row == 3) {
+  if (global_selected_row == 3) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print("MIDI Channel: ");
-  display.println(midi_channel);
+  display.print(F("MIDI Channel: "));
+  display.println(global_midi_channel);
 
-  if (selected_row == 4) {
+  if (global_selected_row == 4) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  char* type = is_pitch ? "Pitch" : "Step";
-  display.print("Type: ");
-  display.println(type);
+  display.print(F("Mode: "));
+  display.println(get_mode_name(global_mode));
 
-  if (selected_row == 5) {
+  if (global_selected_row == 5) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print("Distance step: ");
+  display.print(F("Distance step: "));
   display.println(global_distance_step);
 
   display.display();

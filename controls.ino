@@ -2,11 +2,12 @@
 #define JOY_Y A1
 #define JOY_SW 7
 
-#define PRESS "PRESS"
-#define UP "UP"
-#define DOWN "DOWN"
-#define LEFT "LEFT"
-#define RIGHT "RIGHT"
+#define UP 1
+#define DOWN 2
+#define LEFT 3
+#define RIGHT 4
+#define PRESS 5
+#define NONE 0
 
 int center_value = 500;
 int threshold = 250;
@@ -15,7 +16,7 @@ int xValue;
 int yValue;
 bool buttonState;
 
-char* control_status = "NONE";
+byte control_status = NONE;
 
 void setup_controls() {
   pinMode(JOY_SW, INPUT_PULLUP);
@@ -42,7 +43,7 @@ void handle_press_right() {
         set_midi_channel(global_midi_channel + 1);
         break;
     case 4:
-        set_is_pitch(!global_is_pitch);
+        set_mode(global_mode + 1);
         break;
     case 5:
         set_distance_step(global_distance_step + 1);
@@ -67,7 +68,7 @@ void handle_press_left() {
         set_midi_channel(global_midi_channel - 1);
         break;
     case 4:
-        set_is_pitch(!global_is_pitch);
+        set_mode(global_mode - 1);
         break;
     case 5:
         set_distance_step(global_distance_step - 1);
@@ -107,5 +108,5 @@ void loop_controls() {
     handle_press_down();
   }
 
-  control_status = "NONE";
+  control_status = NONE;
 }
