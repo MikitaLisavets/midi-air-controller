@@ -19,6 +19,7 @@ void set_number_of_notes(int number) {
   }
 
   global_number_of_notes = number % global_max_number_of_notes;
+  global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 }
 
 void set_midi_channel(int channel) {
@@ -35,6 +36,7 @@ void set_distance_step(int step) {
   }
 
   global_distance_step = step;
+  global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 }
 
 void set_mode(int mode) {

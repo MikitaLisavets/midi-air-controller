@@ -9,14 +9,18 @@
 #define PRESS 5
 #define NONE 0
 
-int center_value = 500;
-int threshold = 250;
+#define TIMER_TIMEOUT 200
+
+#define CENTER_VALUE 500
+#define THRESHOLD 250
 
 int xValue;
 int yValue;
 bool buttonState;
 
 byte control_status = NONE;
+
+unsigned long timer;
 
 void setup_controls() {
   pinMode(JOY_SW, INPUT_PULLUP);
@@ -88,25 +92,26 @@ void handle_press_down() {
 }
 
 void loop_controls() {
+  if (millis() < timer && control_status != NONE) {
+    return;
+  }
+
+  timer = millis();
+  control_status = NONE;
+
   xValue = analogRead(JOY_X);
   yValue = analogRead(JOY_Y);
   buttonState = digitalRead(JOY_SW);
 
   if (buttonState == LOW) {
     handle_button_press();
-  }
-  if (xValue >= center_value + threshold) {
+  } else if (xValue >= CENTER_VALUE + THRESHOLD) {
     handle_press_left();
-  }
-  if (xValue <= center_value - threshold) {
+  } else if (xValue <= CENTER_VALUE - THRESHOLD) {
     handle_press_right();
-  }
-  if (yValue >= center_value + threshold) {
+  } else if (yValue >= CENTER_VALUE + THRESHOLD) {
     handle_press_up();
-  }
-  if (yValue <= center_value - threshold) {
+  } else if (yValue <= CENTER_VALUE - THRESHOLD) {
     handle_press_down();
   }
-
-  control_status = NONE;
 }

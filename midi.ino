@@ -81,7 +81,15 @@ void play_midi(int note) {
       }
     }
   } else if (global_mode == MODE_VALUE || global_mode == MODE_VALUE_INVERTED) {
-    int value = global_current_distance < global_min_distance ? global_min_distance : global_current_distance;
+    int value;
+
+    if (global_current_distance < global_min_distance) {
+      value = global_min_distance;
+    } else if (global_current_distance > global_max_distance) {
+      value = global_max_distance;
+    } else {
+      value = global_current_distance;
+    }
 
     global_current_control_value = map(value, global_min_distance, global_max_distance, global_mode == MODE_VALUE ? 0 : 127,  global_mode == MODE_VALUE ? 127 : 0);
 
