@@ -86,16 +86,16 @@ void render_display() {
   } else {
     style_default_row();
   }
-  display.print(F("Mode: "));
-  display.println(get_mode_name(global_mode));
+  display.print(F("Distance step: "));
+  display.println(global_distance_step);
 
   if (global_selected_row == 5) {
     style_selected_row();
   } else {
     style_default_row();
   }
-  display.print(F("Distance step: "));
-  display.println(global_distance_step);
+  display.print(F("Mode: "));
+  display.println(get_mode_name(global_mode));
 
   display.display();
 }

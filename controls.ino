@@ -43,10 +43,10 @@ void handle_press_right() {
         set_midi_channel(global_midi_channel + 1);
         break;
     case 4:
-        set_mode(global_mode + 1);
+        set_distance_step(global_distance_step + 1);
         break;
     case 5:
-        set_distance_step(global_distance_step + 1);
+        set_mode(global_mode + 1);
         break;
   }
 }
@@ -68,10 +68,10 @@ void handle_press_left() {
         set_midi_channel(global_midi_channel - 1);
         break;
     case 4:
-        set_mode(global_mode - 1);
+        set_distance_step(global_distance_step - 1);
         break;
     case 5:
-        set_distance_step(global_distance_step - 1);
+        set_mode(global_mode - 1);
         break;
   }
 
