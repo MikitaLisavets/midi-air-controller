@@ -160,10 +160,10 @@ void setup() {
   thread_distance.setInterval(5);
   thread_distance.onRun(loop_distance);
 
-  thread_midi.setInterval(150);
+  thread_midi.setInterval(100);
   thread_midi.onRun(loop_midi);
 
-  thread_controls.setInterval(2);
+  thread_controls.setInterval(5);
   thread_controls.onRun(loop_controls);
 }
 

@@ -31,7 +31,7 @@ void render_display() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
 
-  display.print(F("Dest: "));
+  display.print(F("Dist: "));
   if (global_current_distance == -1) {
     display.print(F("-"));    
   } else {
