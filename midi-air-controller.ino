@@ -1,44 +1,58 @@
 #include <Thread.h> // Source: https://github.com/ivanseidel/ArduinoThread
 #include <StaticThreadController.h> // Source: https://github.com/ivanseidel/ArduinoThread
+#include <Wire.h>
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define MODE_NOTE 0
-#define MODE_VALUE 1
-#define MODE_VALUE_INVERTED 2
+#define MIDI_MIN 0
+#define MIDI_MAX 127
+#define DEFAULT_VELOCITY 64
 
+// === Modes ===
+#define MODE_L_NOTE_R_CC 0                // Left - Notes, Right - Control changes
+#define MODE_L_NOTE_R_CC_INVERTED 1       // Left - Notes, Right - Control changes (Inverted)
+#define MODE_L_NOTE_R_VELOCITY 2          // Left - Notes, Right - Velocity
+#define MODE_L_NOTE_R_VELOCITY_INVERTED 3 // Left - Notes, Right - Velocity (Inverted)
+#define MODE_L_CC_R_NOTE 4                // Left - Control changes, Right - Notes
+#define MODE_L_CC_INVERTED_R_NOTE 5       // Left - Control changes (Inverted), Right - Notes
+#define MODE_L_VELOCITY_R_NOTE 6          // Left - Velocity, Right - Notes
+#define MODE_L_VELOCITY_INVERTED_R_NOTE 7 // Left - Velocity (Inverted), Right - Notes
+// ==============
+
+Thread thread_display;
 Thread thread_distance;
-Thread thread_midi;
+Thread thread_midi_left;
+Thread thread_midi_right;
 Thread thread_controls;
 
-StaticThreadController<3> main_thread (&thread_distance, &thread_midi, &thread_controls);
+StaticThreadController<5> main_thread (&thread_display, &thread_distance, &thread_midi_left, &thread_midi_right, &thread_controls);
 
 // === Scales ===
-char* note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+constexpr char*  global_note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
-byte MAJOR_SCALE[] = {2,2,1,2,2,2,1};
-byte NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
-byte HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
-byte HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
-byte MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
-byte DORIAN_SCALE[] = {2,1,2,2,2,1,2};
-byte PHRYGIAN_SCALE[] = {1,2,2,2,1,2,2};
-byte LYDIAN_SCALE[] = {2,2,2,1,2,2,1};
-byte MIXOLYDIAN_SCALE[] = {2,2,1,2,2,1,2};
-byte LOCRIAN_SCALE[] = {1,2,2,1,2,2,2};
-byte AHAVA_RABA_SCALE[] = {1,3,1,2,1,2,2};
-byte PENTATONIC_MAJOR_SCALE[] = {2,2,3,2,3};
-byte PENTATONIC_MINOR_SCALE[] = {3,2,2,3,2};
-byte BLUES_SCALE[] = {3,2,1,1,3,2};
-byte WHOLE_TONE_SCALE[] = {2};
-byte DIMINISHED_SCALE[] = {1,2};
-byte WHOLE_HALF_DIMINISHED_SCALE[] = {2,1};
-byte BEBOP_DOMINANT_SCALE[] = {2,2,1,2,2,1,1,1};
-byte BEBOP_MAJOR_SCALE[] = {2,2,1,2,1,1,2,1};
-byte HUNGARIAN_MINOR_SCALE[] = {2,1,3,1,1,3,1};
-byte CHROMATIC_SCALE[] = {1};
+constexpr byte MAJOR_SCALE[] = {2,2,1,2,2,2,1};
+constexpr byte NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
+constexpr byte HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
+constexpr byte HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
+constexpr byte MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
+constexpr byte DORIAN_SCALE[] = {2,1,2,2,2,1,2};
+constexpr byte PHRYGIAN_SCALE[] = {1,2,2,2,1,2,2};
+constexpr byte LYDIAN_SCALE[] = {2,2,2,1,2,2,1};
+constexpr byte MIXOLYDIAN_SCALE[] = {2,2,1,2,2,1,2};
+constexpr byte LOCRIAN_SCALE[] = {1,2,2,1,2,2,2};
+constexpr byte AHAVA_RABA_SCALE[] = {1,3,1,2,1,2,2};
+constexpr byte PENTATONIC_MAJOR_SCALE[] = {2,2,3,2,3};
+constexpr byte PENTATONIC_MINOR_SCALE[] = {3,2,2,3,2};
+constexpr byte BLUES_SCALE[] = {3,2,1,1,3,2};
+constexpr byte WHOLE_TONE_SCALE[] = {2};
+constexpr byte DIMINISHED_SCALE[] = {1,2};
+constexpr byte WHOLE_HALF_DIMINISHED_SCALE[] = {2,1};
+constexpr byte BEBOP_DOMINANT_SCALE[] = {2,2,1,2,2,1,1,1};
+constexpr byte BEBOP_MAJOR_SCALE[] = {2,2,1,2,1,1,2,1};
+constexpr byte HUNGARIAN_MINOR_SCALE[] = {2,1,3,1,1,3,1};
+constexpr byte CHROMATIC_SCALE[] = {1};
 
-const char* scales_names[] = {
+constexpr char* global_scales_names[] = {
   "Major",
   "Natural Min", 
   "Harmonic Maj",
@@ -62,7 +76,7 @@ const char* scales_names[] = {
   "Chromatic"
 };
 
-const byte* scales_steps[] = {
+constexpr byte* scales_steps[] = {
   MAJOR_SCALE,
   NATURAL_MINOR_SCALE,
   HARMONIC_MAJOR_SCALE,
@@ -86,7 +100,7 @@ const byte* scales_steps[] = {
   CHROMATIC_SCALE
 };
 
-const byte scales_sizes[] = {
+byte constexpr scales_sizes[] = {
   ARRAY_SIZE(MAJOR_SCALE),
   ARRAY_SIZE(NATURAL_MINOR_SCALE),
   ARRAY_SIZE(HARMONIC_MAJOR_SCALE),
@@ -112,9 +126,12 @@ const byte scales_sizes[] = {
 // ==============
 
 // === Global Variables ===
-int global_dynamic_distance = 0;
+int global_dynamic_distance_left = 0;
+int global_dynamic_distance_right = 0;
 
-int global_current_distance = 0;
+int global_current_distance_left = 0;
+int global_current_distance_right = 0;
+
 int global_current_note = -1;
 int global_note_index = -1;
 int global_previous_note = -1;
@@ -126,49 +143,60 @@ int global_number_of_notes = 14;
 int global_max_number_of_notes = 96;
 
 int global_distance_step = 15;
-int global_min_distance = 20;
+int global_min_distance = 40;
 int global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 
-int global_min_pitch_value = 0;
-int global_pitch_value = 0;
-int global_max_pitch_value = 127;
 int global_velocity = 64;
+int global_previous_velocity = 64;
 int global_midi_channel = 0;
-int global_max_midi_channel = 127;
 
 int global_current_scale_index = 0;
 
 int global_root_note = 36;
-int global_max_note = 127;
 
-int global_number_of_scales = ARRAY_SIZE(scales_names);
+int global_number_of_scales = ARRAY_SIZE(global_scales_names);
 
 int global_selected_row = 0;
-int global_max_rows = 6;
+int global_max_rows = 8;
 
 int global_mode = 0;
-int global_max_modes = 3;
+int global_max_modes = 8;
 
-int global_control_channel = 0;
+int global_control_change = 0;
 
+int global_tempo = 120;
+
+constexpr byte global_menu_root_note = 0;
+constexpr byte global_menu_scale = 1;
+constexpr byte global_menu_mode = 2;
+constexpr byte global_menu_notes = 3;
+constexpr byte global_menu_distance_step = 4;
+constexpr byte global_menu_tempo = 5;
+constexpr byte global_menu_midi = 6;
+constexpr byte global_menu_control_change = 7;
 // =========================
 
 void setup() {
   setup_display();
+  setup_distance(); // NOTE: Setup VL53L0X only after display
   setup_controls();
 
-  thread_distance.setInterval(5);
+  thread_display.setInterval(60);
+  thread_display.onRun(loop_display);
+
+  thread_distance.setInterval(20);
   thread_distance.onRun(loop_distance);
 
-  thread_midi.setInterval(100);
-  thread_midi.onRun(loop_midi);
+  thread_midi_left.setInterval(global_tempo);
+  thread_midi_left.onRun(loop_midi_left);
 
-  thread_controls.setInterval(5);
+  thread_midi_right.setInterval(global_tempo);
+  thread_midi_right.onRun(loop_midi_right);
+
+  thread_controls.setInterval(100);
   thread_controls.onRun(loop_controls);
 }
 
 void loop() {
   main_thread.run();
-
-  render_display();
 }

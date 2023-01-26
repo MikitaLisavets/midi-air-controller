@@ -1,4 +1,4 @@
-#include "MIDIUSB.h"
+#include "MIDIUSB.h" // Source: https://github.com/arduino-libraries/MIDIUSB
 
 void note_on(byte channel, byte pitch, byte velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
@@ -47,59 +47,130 @@ int get_note(int distance) {
       note = -1;
     }
   }
-
   return note;
 }
 
-void play_note(int note) {
-  if (global_previous_note != note) {
-    if (note == -1) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+void midi_note(int current_distance) {
+  global_current_note = get_note(current_distance);
 
-      global_previous_note = note;
+  if (global_previous_note == global_current_note) {
+    return;
+  }
 
-      MidiUSB.flush();
-    } else if (global_previous_note != note) {
-      note_off(global_midi_channel, global_previous_note, global_velocity);
+  if (global_current_note == -1) {
+    note_off(global_midi_channel, global_previous_note, global_velocity);
 
-      global_previous_note = note;
+    global_previous_note = global_current_note;
 
-      note_on(global_midi_channel, note, global_velocity);
-      MidiUSB.flush();
-    }
+    MidiUSB.flush();
+  } else {
+    note_off(global_midi_channel, global_previous_note, global_velocity);
+
+    global_previous_note = global_current_note;
+
+    note_on(global_midi_channel, global_current_note, global_velocity);
+    MidiUSB.flush();
   }
 }
 
-void play_midi(int note) {
-  if (global_mode == MODE_NOTE) {
-    play_note(note);
-  } else if (global_mode == MODE_VALUE || global_mode == MODE_VALUE_INVERTED) {
-    int value;
+byte get_midi_value(int current_distance, bool is_inverted) {
+  int value;
+  if (current_distance < global_min_distance) {
+    value = global_min_distance;
+  } else if (current_distance > global_max_distance) {
+    value = global_max_distance;
+  } else {
+    value = current_distance;
+  }
 
-    if (global_current_distance < global_min_distance) {
-      value = global_min_distance;
-    } else if (global_current_distance > global_max_distance) {
-      value = global_max_distance;
-    } else {
-      value = global_current_distance;
-    }
+  return map(value, global_min_distance, global_max_distance, is_inverted ? 127 : 0,  is_inverted ? 0 : 127);
+}
 
-    global_current_control_value = map(value, global_min_distance, global_max_distance, global_mode == MODE_VALUE ? 0 : 127,  global_mode == MODE_VALUE ? 127 : 0);
+void midi_cc(int current_distance, bool is_inverted) {
+  global_velocity = DEFAULT_VELOCITY;
+  global_previous_velocity = DEFAULT_VELOCITY;
 
-    if (global_current_control_value == 0 && global_mode == MODE_VALUE || global_current_control_value == 127 && global_mode == MODE_VALUE_INVERTED) {
-      global_current_control_value = global_previous_control_value;
-    }
+  global_current_control_value = get_midi_value(current_distance, is_inverted);
 
-    if (global_previous_control_value != global_current_control_value) {
-      global_previous_control_value = global_current_control_value;
-      control_change(global_midi_channel, global_control_channel, global_current_control_value);
-      MidiUSB.flush();  
-    }
+  if (global_current_control_value == 0 && is_inverted || global_current_control_value == 127 && !is_inverted) {
+    global_current_control_value = global_previous_control_value;
+  }
+
+  if (global_previous_control_value != global_current_control_value) {
+    global_previous_control_value = global_current_control_value;
+    control_change(global_midi_channel, global_control_change, global_current_control_value);
+    MidiUSB.flush();  
   }
 }
 
-void loop_midi() {
-  global_current_distance = global_dynamic_distance;
-  global_current_note = get_note(global_current_distance);
-  play_midi(global_current_note);
+void midi_velocity(int current_distance, bool is_inverted) {
+  global_velocity = get_midi_value(current_distance, is_inverted);
+
+  if (global_velocity == 0 && is_inverted || global_velocity == 127 && !is_inverted) {
+    global_velocity = global_previous_velocity;
+  }
+
+  global_previous_velocity = global_velocity;
+}
+
+void loop_midi_left() {
+  global_current_distance_left = global_dynamic_distance_left;
+
+  switch(global_mode) {
+    case MODE_L_NOTE_R_CC:
+      midi_note(global_current_distance_left);      
+      break;
+    case MODE_L_NOTE_R_CC_INVERTED:
+      midi_note(global_current_distance_left);
+      break;
+    case MODE_L_NOTE_R_VELOCITY:
+      midi_note(global_current_distance_left);      
+      break;
+    case MODE_L_NOTE_R_VELOCITY_INVERTED:
+      midi_note(global_current_distance_left);      
+      break;
+    case MODE_L_CC_R_NOTE:
+      midi_cc(global_current_distance_left, false);    
+      break;
+    case MODE_L_CC_INVERTED_R_NOTE:
+      midi_cc(global_current_distance_left, true);
+      break;
+    case MODE_L_VELOCITY_R_NOTE:
+      midi_velocity(global_current_distance_left, false);  
+      break;
+    case MODE_L_VELOCITY_INVERTED_R_NOTE:
+      midi_velocity(global_current_distance_left, true);
+      break;
+  }
+}
+
+void loop_midi_right() {
+  global_current_distance_right = global_dynamic_distance_right;
+
+  switch(global_mode) {
+    case MODE_L_NOTE_R_CC:  
+      midi_cc(global_current_distance_right, false);
+      break;
+    case MODE_L_NOTE_R_CC_INVERTED:   
+      midi_cc(global_current_distance_right, true);
+      break;
+    case MODE_L_NOTE_R_VELOCITY:    
+      midi_velocity(global_current_distance_right, false);
+      break;
+    case MODE_L_NOTE_R_VELOCITY_INVERTED:    
+      midi_velocity(global_current_distance_right, true);
+      break;
+    case MODE_L_CC_R_NOTE:
+      midi_note(global_current_distance_right);      
+      break;
+    case MODE_L_CC_INVERTED_R_NOTE:
+      midi_note(global_current_distance_right);  
+      break;
+    case MODE_L_VELOCITY_R_NOTE:
+      midi_note(global_current_distance_right);      
+      break;
+    case MODE_L_VELOCITY_INVERTED_R_NOTE:
+      midi_note(global_current_distance_right);    
+      break;
+  }
 }

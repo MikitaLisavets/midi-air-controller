@@ -1,16 +1,33 @@
-#include <RunningMedian.h>
-#include <hcsr04.h>
+#include <VL53L0X.h> // Source: https://github.com/pololu/vl53l0x-arduino
 
-#define TRIG_PIN 10
-#define ECHO_PIN 9
+#define VL53L0X_LEFT_ADDRESS 0x30
+#define VL53L0X_RIGHT_ADDRESS 0x31
 
-#define DISTANCE_ACCURACY 3
+#define VL53L0X_LEFT_PIN 4
+#define VL53L0X_RIGHT_PIN 14
 
-RunningMedian distancies = RunningMedian(DISTANCE_ACCURACY);
+VL53L0X sensor_left;
+VL53L0X sensor_right;
 
-HCSR04 hcsr04(TRIG_PIN, ECHO_PIN, 0, 9999);
+void setup_distance(){
+  Wire.begin();
+
+  pinMode(VL53L0X_LEFT_PIN, OUTPUT);
+  pinMode(VL53L0X_RIGHT_PIN, OUTPUT);
+
+  digitalWrite(VL53L0X_LEFT_PIN, LOW);
+  digitalWrite(VL53L0X_RIGHT_PIN, LOW);
+
+  pinMode(VL53L0X_LEFT_PIN, INPUT);
+  sensor_left.init(true);
+  sensor_left.setAddress(VL53L0X_LEFT_ADDRESS);
+
+  pinMode(VL53L0X_RIGHT_PIN, INPUT);
+  sensor_right.init(true);
+  sensor_right.setAddress(VL53L0X_RIGHT_ADDRESS);
+}
 
 void loop_distance() {
-  distancies.add(hcsr04.distanceInMillimeters());
-  global_dynamic_distance = round(distancies.getMedian());
+  global_dynamic_distance_left = sensor_left.readRangeSingleMillimeters();
+  global_dynamic_distance_right = sensor_right.readRangeSingleMillimeters();
 }

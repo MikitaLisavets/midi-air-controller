@@ -1,3 +1,7 @@
+bool inRange(int val, int minimum, int maximum) {
+  return ((minimum <= val) && (val < maximum));
+}
+
 void set_selected_row(int row) {
   if (row < 0) {
     row = global_max_rows + row;
@@ -14,20 +18,20 @@ void set_current_scale_index(int index) {
 }
 
 void set_number_of_notes(int number) {
-  if (number < 0) {
-    number = global_max_number_of_notes - 1;
+  if (number < MIDI_MIN) {
+    number = MIDI_MAX - 1;
   }
 
-  global_number_of_notes = number % global_max_number_of_notes;
+  global_number_of_notes = number % MIDI_MAX;
   global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 }
 
 void set_midi_channel(int channel) {
-  if (channel < 0) {
-    channel = global_max_midi_channel - 1;
+  if (channel < MIDI_MIN) {
+    channel = MIDI_MAX - 1;
   }
 
-  global_midi_channel = channel % global_max_midi_channel;
+  global_midi_channel = channel % MIDI_MAX;
 }
 
 void set_distance_step(int step) {
@@ -47,34 +51,28 @@ void set_mode(int mode) {
   global_mode = mode % global_max_modes;
 }
 
+void set_tempo(int tempo) {
+  if (tempo < 0) {
+    tempo = 0;
+  }
+
+  global_tempo = tempo;
+  thread_midi_left.setInterval(global_tempo);
+  thread_midi_right.setInterval(global_tempo);
+}
+
 void set_root_note(int note) {
-  if (note < 0) {
-    note = global_max_note;
+  if (note < MIDI_MIN) {
+    note = MIDI_MAX - 1;
   }
 
-  global_root_note = note % global_max_note;
+  global_root_note = note % MIDI_MAX;
 }
 
-char* get_mode_name(int mode) {
-  switch(mode) {
-    case MODE_NOTE: return "Note";
-    case MODE_VALUE: return "Value";
-    case MODE_VALUE_INVERTED: return "Value (inv)";
+void set_control_change(int cc) {
+  if (cc < MIDI_MIN) {
+    cc = MIDI_MAX - 1;
   }
-}
 
-String get_note_name(int note) {
-  if (note == -1) {
-    return "-";
-  } else {
-    return note_names[note % 12] + String(round(note / 12));
-  }
-}
-
-char* get_scale_name(int index) {
-  return scales_names[index];
-}
-
-bool inRange(int val, int minimum, int maximum) {
-  return ((minimum <= val) && (val < maximum));
+  global_control_change = cc % MIDI_MAX;
 }
