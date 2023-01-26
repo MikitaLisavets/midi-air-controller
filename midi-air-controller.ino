@@ -143,7 +143,7 @@ int global_number_of_notes = 14;
 int global_max_number_of_notes = 96;
 
 int global_distance_step = 15;
-int global_min_distance = 40;
+int global_min_distance = 30;
 int global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 
 int global_velocity = 64;
