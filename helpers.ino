@@ -51,14 +51,14 @@ void set_mode(int mode) {
   global_mode = mode % global_max_modes;
 }
 
-void set_tempo(int tempo) {
-  if (tempo < 0) {
-    tempo = 0;
+void set_interval(int interval) {
+  if (interval < 0) {
+    interval = 0;
   }
 
-  global_tempo = tempo;
-  thread_midi_left.setInterval(global_tempo);
-  thread_midi_right.setInterval(global_tempo);
+  global_interval = interval;
+  thread_midi_left.setInterval(global_interval);
+  thread_midi_right.setInterval(global_interval);
 }
 
 void set_root_note(int note) {

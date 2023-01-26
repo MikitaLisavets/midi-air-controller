@@ -126,7 +126,7 @@ void render_row(byte row_index) {
     case global_menu_mode: return render_row_mode();
     case global_menu_notes: return render_row_notes();
     case global_menu_distance_step: return render_row_distance_step();
-    case global_menu_tempo: return render_row_tempo();
+    case global_menu_interval: return render_row_interval();
     case global_menu_midi: return render_row_midi();
     case global_menu_control_change: return render_row_control_change();
   }
@@ -158,9 +158,9 @@ void render_row_distance_step() {
   display.println(global_distance_step);
 }
 
-void render_row_tempo() {
-  display.print(F("Tempo: "));
-  display.println(global_tempo);
+void render_row_interval() {
+  display.print(F("Interval: "));
+  display.println(global_interval);
 }
 
 void render_row_midi() {

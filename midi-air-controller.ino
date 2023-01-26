@@ -164,14 +164,14 @@ int global_max_modes = 8;
 
 int global_control_change = 0;
 
-int global_tempo = 120;
+int global_interval = 120;
 
 constexpr unsigned char global_menu_root_note = 0;
 constexpr unsigned char global_menu_scale = 1;
 constexpr unsigned char global_menu_mode = 2;
 constexpr unsigned char global_menu_notes = 3;
 constexpr unsigned char global_menu_distance_step = 4;
-constexpr unsigned char global_menu_tempo = 5;
+constexpr unsigned char global_menu_interval = 5;
 constexpr unsigned char global_menu_midi = 6;
 constexpr unsigned char global_menu_control_change = 7;
 // =========================
@@ -187,10 +187,10 @@ void setup() {
   thread_distance.setInterval(20);
   thread_distance.onRun(loop_distance);
 
-  thread_midi_left.setInterval(global_tempo);
+  thread_midi_left.setInterval(global_interval);
   thread_midi_left.onRun(loop_midi_left);
 
-  thread_midi_right.setInterval(global_tempo);
+  thread_midi_right.setInterval(global_interval);
   thread_midi_right.onRun(loop_midi_right);
 
   thread_controls.setInterval(100);
