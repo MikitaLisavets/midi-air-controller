@@ -46,7 +46,7 @@ void handle_press_right() {
         set_distance_step(global_distance_step + 5);
         break;
     case global_menu_tempo:
-        set_tempo(global_tempo + 1);
+        set_tempo(global_tempo + 5);
         break;
     case global_menu_midi:
         set_midi_channel(global_midi_channel + 1);
@@ -77,7 +77,7 @@ void handle_press_left() {
         set_distance_step(global_distance_step - 5);
         break;
     case global_menu_tempo:
-        set_tempo(global_tempo - 1);
+        set_tempo(global_tempo - 5);
         break;
     case global_menu_midi:
         set_midi_channel(global_midi_channel - 1);
