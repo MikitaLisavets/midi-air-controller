@@ -30,27 +30,27 @@ StaticThreadController<5> main_thread (&thread_display, &thread_distance, &threa
 // === Scales ===
 constexpr char*  global_note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 
-constexpr byte MAJOR_SCALE[] = {2,2,1,2,2,2,1};
-constexpr byte NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
-constexpr byte HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
-constexpr byte HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
-constexpr byte MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
-constexpr byte DORIAN_SCALE[] = {2,1,2,2,2,1,2};
-constexpr byte PHRYGIAN_SCALE[] = {1,2,2,2,1,2,2};
-constexpr byte LYDIAN_SCALE[] = {2,2,2,1,2,2,1};
-constexpr byte MIXOLYDIAN_SCALE[] = {2,2,1,2,2,1,2};
-constexpr byte LOCRIAN_SCALE[] = {1,2,2,1,2,2,2};
-constexpr byte AHAVA_RABA_SCALE[] = {1,3,1,2,1,2,2};
-constexpr byte PENTATONIC_MAJOR_SCALE[] = {2,2,3,2,3};
-constexpr byte PENTATONIC_MINOR_SCALE[] = {3,2,2,3,2};
-constexpr byte BLUES_SCALE[] = {3,2,1,1,3,2};
-constexpr byte WHOLE_TONE_SCALE[] = {2};
-constexpr byte DIMINISHED_SCALE[] = {1,2};
-constexpr byte WHOLE_HALF_DIMINISHED_SCALE[] = {2,1};
-constexpr byte BEBOP_DOMINANT_SCALE[] = {2,2,1,2,2,1,1,1};
-constexpr byte BEBOP_MAJOR_SCALE[] = {2,2,1,2,1,1,2,1};
-constexpr byte HUNGARIAN_MINOR_SCALE[] = {2,1,3,1,1,3,1};
-constexpr byte CHROMATIC_SCALE[] = {1};
+constexpr unsigned char MAJOR_SCALE[] = {2,2,1,2,2,2,1};
+constexpr unsigned char NATURAL_MINOR_SCALE[] = {2,1,2,2,1,2,2};
+constexpr unsigned char HARMONIC_MAJOR_SCALE[] = {2,2,1,2,1,3,1};
+constexpr unsigned char HARMONIC_MINOR_SCALE[] = {2,1,2,2,1,3,1};
+constexpr unsigned char MELODIC_MINOR_SCALE[] = {2,1,2,2,2,2,1};
+constexpr unsigned char DORIAN_SCALE[] = {2,1,2,2,2,1,2};
+constexpr unsigned char PHRYGIAN_SCALE[] = {1,2,2,2,1,2,2};
+constexpr unsigned char LYDIAN_SCALE[] = {2,2,2,1,2,2,1};
+constexpr unsigned char MIXOLYDIAN_SCALE[] = {2,2,1,2,2,1,2};
+constexpr unsigned char LOCRIAN_SCALE[] = {1,2,2,1,2,2,2};
+constexpr unsigned char AHAVA_RABA_SCALE[] = {1,3,1,2,1,2,2};
+constexpr unsigned char PENTATONIC_MAJOR_SCALE[] = {2,2,3,2,3};
+constexpr unsigned char PENTATONIC_MINOR_SCALE[] = {3,2,2,3,2};
+constexpr unsigned char BLUES_SCALE[] = {3,2,1,1,3,2};
+constexpr unsigned char WHOLE_TONE_SCALE[] = {2};
+constexpr unsigned char DIMINISHED_SCALE[] = {1,2};
+constexpr unsigned char WHOLE_HALF_DIMINISHED_SCALE[] = {2,1};
+constexpr unsigned char BEBOP_DOMINANT_SCALE[] = {2,2,1,2,2,1,1,1};
+constexpr unsigned char BEBOP_MAJOR_SCALE[] = {2,2,1,2,1,1,2,1};
+constexpr unsigned char HUNGARIAN_MINOR_SCALE[] = {2,1,3,1,1,3,1};
+constexpr unsigned char CHROMATIC_SCALE[] = {1};
 
 constexpr char* global_scales_names[] = {
   "Major",
@@ -76,7 +76,7 @@ constexpr char* global_scales_names[] = {
   "Chromatic"
 };
 
-constexpr byte* scales_steps[] = {
+constexpr unsigned char* scales_steps[] = {
   MAJOR_SCALE,
   NATURAL_MINOR_SCALE,
   HARMONIC_MAJOR_SCALE,
@@ -100,7 +100,7 @@ constexpr byte* scales_steps[] = {
   CHROMATIC_SCALE
 };
 
-byte constexpr scales_sizes[] = {
+constexpr unsigned char scales_sizes[] = {
   ARRAY_SIZE(MAJOR_SCALE),
   ARRAY_SIZE(NATURAL_MINOR_SCALE),
   ARRAY_SIZE(HARMONIC_MAJOR_SCALE),
@@ -166,14 +166,14 @@ int global_control_change = 0;
 
 int global_tempo = 120;
 
-constexpr byte global_menu_root_note = 0;
-constexpr byte global_menu_scale = 1;
-constexpr byte global_menu_mode = 2;
-constexpr byte global_menu_notes = 3;
-constexpr byte global_menu_distance_step = 4;
-constexpr byte global_menu_tempo = 5;
-constexpr byte global_menu_midi = 6;
-constexpr byte global_menu_control_change = 7;
+constexpr unsigned char global_menu_root_note = 0;
+constexpr unsigned char global_menu_scale = 1;
+constexpr unsigned char global_menu_mode = 2;
+constexpr unsigned char global_menu_notes = 3;
+constexpr unsigned char global_menu_distance_step = 4;
+constexpr unsigned char global_menu_tempo = 5;
+constexpr unsigned char global_menu_midi = 6;
+constexpr unsigned char global_menu_control_change = 7;
 // =========================
 
 void setup() {

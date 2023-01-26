@@ -27,9 +27,17 @@ void style_default_row() {
 
 String get_note_name(int note) {
   if (note == -1) {
-    return "-";
+    return "";
   } else {
-    return global_note_names[note % 12] + (char)round(note / 12);
+    return global_note_names[note % 12];
+  }
+}
+
+int get_note_octave(int note) {
+  if (note == -1) {
+    return 0;
+  } else {
+    return round(note / 12);
   }
 }
 
@@ -56,6 +64,7 @@ void render_top_bar() {
     case MODE_L_NOTE_R_CC_INVERTED:
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
+      display.print(get_note_octave(global_current_note));
       display.print(F(" | "));
       display.print(F("CC: "));
       display.print(global_current_control_value);
@@ -64,6 +73,7 @@ void render_top_bar() {
     case MODE_L_NOTE_R_VELOCITY_INVERTED:
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
+      display.print(get_note_octave(global_current_note));
       display.print(F(" | "));
       display.print(F("V: "));
       display.print(global_velocity);
@@ -75,6 +85,7 @@ void render_top_bar() {
       display.print(F(" | "));
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
+      display.print(get_note_octave(global_current_note));
       break;
     case MODE_L_VELOCITY_R_NOTE:
     case MODE_L_VELOCITY_INVERTED_R_NOTE:
@@ -83,6 +94,7 @@ void render_top_bar() {
       display.print(F(" | "));
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
+      display.print(get_note_octave(global_current_note));
       break;
   }
 
@@ -122,7 +134,8 @@ void render_row(byte row_index) {
 
 void render_row_root_note() {
   display.print(F("Root note: "));
-  display.println(get_note_name(global_root_note));
+  display.print(get_note_name(global_root_note));
+  display.println(get_note_octave(global_root_note));
 }
 
 void render_row_scale() {
