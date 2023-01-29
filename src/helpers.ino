@@ -1,3 +1,5 @@
+#include <helpers.h>
+
 bool inRange(int16_t val, int16_t minimum, int16_t maximum) {
   return ((minimum <= val) && (val < maximum));
 }

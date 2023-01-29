@@ -1,4 +1,4 @@
-#include "MIDIUSB.h" // Source: https://github.com/arduino-libraries/MIDIUSB
+#include <midi.h>
 
 void note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   midiEventPacket_t noteOn = {0x09, (uint8_t)(0x90 | channel), pitch, velocity};
