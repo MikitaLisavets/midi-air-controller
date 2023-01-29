@@ -1,10 +1,10 @@
 #include <VL53L0X.h> // Source: https://github.com/pololu/vl53l0x-arduino
 
-#define VL53L0X_LEFT_ADDRESS 0x30
-#define VL53L0X_RIGHT_ADDRESS 0x31
+const uint8_t VL53L0X_LEFT_ADDRESS = 0x30;
+const uint8_t VL53L0X_RIGHT_ADDRESS = 0x31;
 
-#define VL53L0X_LEFT_PIN 4
-#define VL53L0X_RIGHT_PIN 14
+const uint8_t VL53L0X_LEFT_PIN = 4;
+const uint8_t VL53L0X_RIGHT_PIN = 14;
 
 VL53L0X sensor_left;
 VL53L0X sensor_right;

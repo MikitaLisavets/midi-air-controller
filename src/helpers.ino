@@ -1,23 +1,23 @@
-bool inRange(int val, int minimum, int maximum) {
+bool inRange(int16_t val, int16_t minimum, int16_t maximum) {
   return ((minimum <= val) && (val < maximum));
 }
 
-void set_selected_row(int row) {
+void set_selected_row(int8_t row) {
   if (row < 0) {
-    row = global_max_rows + row;
+    row = MAX_MENU_ROWS + row;
   }
 
-  global_selected_row = row % global_max_rows;
+  global_menu_selected_row = row % MAX_MENU_ROWS;
 }
 
-void set_current_scale_index(int index) {
+void set_current_scale_index(int8_t index) {
   if (index < 0) {
-    index = global_number_of_scales - 1;
+    index = NUMBER_OF_SCALES - 1;
   }
-  global_current_scale_index = index % global_number_of_scales;
+  global_current_scale_index = index % NUMBER_OF_SCALES;
 }
 
-void set_number_of_notes(int number) {
+void set_number_of_notes(int8_t number) {
   if (number < MIDI_MIN) {
     number = MIDI_MAX - 1;
   }
@@ -26,7 +26,7 @@ void set_number_of_notes(int number) {
   global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 }
 
-void set_midi_channel(int channel) {
+void set_midi_channel(int8_t channel) {
   if (channel < MIDI_MIN) {
     channel = MIDI_MAX - 1;
   }
@@ -34,7 +34,7 @@ void set_midi_channel(int channel) {
   global_midi_channel = channel % MIDI_MAX;
 }
 
-void set_distance_step(int step) {
+void set_distance_step(int8_t step) {
   if (step < 0) {
     step = 0;
   }
@@ -43,15 +43,15 @@ void set_distance_step(int step) {
   global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 }
 
-void set_mode(int mode) {
+void set_mode(int8_t mode) {
   if (mode < 0) {
-    mode = global_max_modes - 1;
+    mode = MAX_MODES - 1;
   }
 
-  global_mode = mode % global_max_modes;
+  global_mode = mode % MAX_MODES;
 }
 
-void set_interval(int interval) {
+void set_interval(int16_t interval) {
   if (interval < 0) {
     interval = 0;
   }
@@ -61,7 +61,7 @@ void set_interval(int interval) {
   thread_midi_right.setInterval(global_interval);
 }
 
-void set_root_note(int note) {
+void set_root_note(int8_t note) {
   if (note < MIDI_MIN) {
     note = MIDI_MAX - 1;
   }
@@ -69,7 +69,7 @@ void set_root_note(int note) {
   global_root_note = note % MIDI_MAX;
 }
 
-void set_control_change(int cc) {
+void set_control_change(int8_t cc) {
   if (cc < MIDI_MIN) {
     cc = MIDI_MAX - 1;
   }

@@ -1,36 +1,36 @@
 #include "MIDIUSB.h" // Source: https://github.com/arduino-libraries/MIDIUSB
 
-void note_on(byte channel, byte pitch, byte velocity) {
+void note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
   MidiUSB.sendMIDI(noteOn);
 }
 
-void note_off(byte channel, byte pitch, byte velocity) {
+void note_off(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   midiEventPacket_t noteOff = {0x08, 0x80 | channel, pitch, velocity};
   MidiUSB.sendMIDI(noteOff);
 }
 
-void control_change(byte channel, byte control, byte value) {
+void control_change(uint8_t channel, uint8_t control, uint8_t value) {
   midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
   MidiUSB.sendMIDI(event);
 }
 
-int getNoteOffset(byte note_index) {
+uint8_t getNoteOffset(uint8_t note_index) {
   int offset = 0;
 
-  for (byte i = 0; i < note_index; i++) {
-    byte scale_step_index = i % scales_sizes[global_current_scale_index];
-    byte scale_step = scales_steps[global_current_scale_index][scale_step_index];
+  for (uint8_t i = 0; i < note_index; i++) {
+    byte scale_step_index = i % SCALES[global_current_scale_index].size;
+    byte scale_step = SCALES[global_current_scale_index].steps[scale_step_index];
     offset = offset + scale_step;
   }
 
   return offset;
 } 
 
-int get_note(int distance) {
-  int note = global_previous_note;
+uint8_t get_note(int16_t distance) {
+  int8_t note = global_previous_note;
 
-  for (byte i = 0; i < global_number_of_notes; i++) {
+  for (uint8_t i = 0; i < global_number_of_notes; i++) {
     int range_start = global_min_distance + i * global_distance_step;
     int range_end = global_min_distance + (i + 1) * global_distance_step;
 
@@ -38,7 +38,7 @@ int get_note(int distance) {
       if (i == 0) {
         note = global_root_note;
       } else {
-        int offset = getNoteOffset(i);
+        uint8_t offset = getNoteOffset(i);
         note = global_root_note + offset;
       }
       global_note_index = i;
@@ -50,7 +50,7 @@ int get_note(int distance) {
   return note;
 }
 
-void midi_note(int current_distance) {
+void midi_note(int16_t current_distance) {
   global_current_note = get_note(current_distance);
 
   if (global_previous_note == global_current_note) {
@@ -73,7 +73,7 @@ void midi_note(int current_distance) {
   }
 }
 
-byte get_midi_value(int current_distance, bool is_inverted) {
+uint8_t get_midi_value(int16_t current_distance, bool is_inverted) {
   int value;
   if (current_distance < global_min_distance) {
     value = global_min_distance;
@@ -86,7 +86,7 @@ byte get_midi_value(int current_distance, bool is_inverted) {
   return map(value, global_min_distance, global_max_distance, is_inverted ? 127 : 0,  is_inverted ? 0 : 127);
 }
 
-void midi_cc(int current_distance, bool is_inverted) {
+void midi_cc(int16_t current_distance, bool is_inverted) {
   global_velocity = DEFAULT_VELOCITY;
   global_previous_velocity = DEFAULT_VELOCITY;
 
@@ -103,7 +103,7 @@ void midi_cc(int current_distance, bool is_inverted) {
   }
 }
 
-void midi_velocity(int current_distance, bool is_inverted) {
+void midi_velocity(int16_t current_distance, bool is_inverted) {
   global_velocity = get_midi_value(current_distance, is_inverted);
 
   if (global_velocity == 0 && is_inverted || global_velocity == 127 && !is_inverted) {

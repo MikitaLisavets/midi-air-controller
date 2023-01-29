@@ -2,15 +2,13 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-#define OLED_RESET 4
-#define SCREEN_ADDRESS 0x3C
-#define SCREEN_MENU_ROWS 6
+const uint8_t SCREEN_WIDTH = 128;
+const uint8_t SCREEN_HEIGHT = 64;
+const uint8_t OLED_RESET = 4;
+const uint8_t SCREEN_ADDRESS = 0x3C;
+const uint8_t SCREEN_MENU_ROWS = 6;
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
-byte font_width = 6;
 
 void setup_display() {
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
@@ -25,15 +23,28 @@ void style_default_row() {
   display.setTextColor(WHITE);
 }
 
-String get_note_name(int note) {
+char* get_note_name(int8_t note) {
   if (note == -1) {
     return "";
   } else {
-    return global_note_names[note % 12];
+  switch(note % 12) {
+    case 0: return "C";
+    case 1: return "C#";
+    case 2: return "D";
+    case 3: return "D#";
+    case 4: return "E";
+    case 5: return "F";
+    case 6: return "F#";
+    case 7: return "G";
+    case 8: return "G#";
+    case 9: return "A";
+    case 10: return "A#";
+    case 11: return "B";
+  }
   }
 }
 
-int get_note_octave(int note) {
+int8_t get_note_octave(int8_t note) {
   if (note == -1) {
     return 0;
   } else {
@@ -41,7 +52,7 @@ int get_note_octave(int note) {
   }
 }
 
-char* get_mode_name(int mode) {
+char* get_mode_name(int8_t mode) {
   switch(mode) {
     case MODE_L_NOTE_R_CC: return "L:N | R:CC";
     case MODE_L_NOTE_R_CC_INVERTED: return "L:N | R:CC(I)";
@@ -54,8 +65,8 @@ char* get_mode_name(int mode) {
   }
 }
 
-char* get_scale_name(int index) {
-  return global_scales_names[index];
+char* get_scale_name(int8_t index) {
+  return SCALES[index].name;
 }
 
 void render_top_bar() {
@@ -104,16 +115,16 @@ void render_top_bar() {
 
 void render_menu() {
   for (byte i = 0; i < SCREEN_MENU_ROWS; i++) {
-    if (global_selected_row < SCREEN_MENU_ROWS) {
+    if (global_menu_selected_row < SCREEN_MENU_ROWS) {
       render_row(i);      
     } else {
-      render_row(global_selected_row - SCREEN_MENU_ROWS + 1 + i);  
+      render_row(global_menu_selected_row - SCREEN_MENU_ROWS + 1 + i);  
     }
   }
 }
  
-void render_row(byte row_index) {
-  bool is_selected = row_index == global_selected_row;
+void render_row(int8_t row_index) {
+  bool is_selected = row_index == global_menu_selected_row;
   if (is_selected) {
     style_selected_row();
   } else {
@@ -121,14 +132,14 @@ void render_row(byte row_index) {
   }
 
   switch(row_index) {
-    case global_menu_root_note: return render_row_root_note();
-    case global_menu_scale: return render_row_scale();
-    case global_menu_mode: return render_row_mode();
-    case global_menu_notes: return render_row_notes();
-    case global_menu_distance_step: return render_row_distance_step();
-    case global_menu_interval: return render_row_interval();
-    case global_menu_midi: return render_row_midi();
-    case global_menu_control_change: return render_row_control_change();
+    case MENU_ROOT_NOTE: return render_row_root_note();
+    case MENU_SCALE: return render_row_scale();
+    case MENU_MODE: return render_row_mode();
+    case MENU_NOTES: return render_row_notes();
+    case MENU_DISTANCE_STEP: return render_row_distance_step();
+    case MENU_INTERVAL: return render_row_interval();
+    case MENU_MIDI: return render_row_midi();
+    case MENU_CC: return render_row_control_change();
   }
 }
 
