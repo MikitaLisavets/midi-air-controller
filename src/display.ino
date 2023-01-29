@@ -23,24 +23,25 @@ void style_default_row() {
   display.setTextColor(WHITE);
 }
 
-char* get_note_name(int8_t note) {
+const char* get_note_name(int8_t note) {
   if (note == -1) {
     return "";
   } else {
-  switch(note % 12) {
-    case 0: return "C";
-    case 1: return "C#";
-    case 2: return "D";
-    case 3: return "D#";
-    case 4: return "E";
-    case 5: return "F";
-    case 6: return "F#";
-    case 7: return "G";
-    case 8: return "G#";
-    case 9: return "A";
-    case 10: return "A#";
-    case 11: return "B";
-  }
+    switch(note % 12) {
+      case 0: return "C";
+      case 1: return "C#";
+      case 2: return "D";
+      case 3: return "D#";
+      case 4: return "E";
+      case 5: return "F";
+      case 6: return "F#";
+      case 7: return "G";
+      case 8: return "G#";
+      case 9: return "A";
+      case 10: return "A#";
+      case 11: return "B";
+      default: return "";
+    }
   }
 }
 
@@ -52,7 +53,7 @@ int8_t get_note_octave(int8_t note) {
   }
 }
 
-char* get_mode_name(int8_t mode) {
+const char* get_mode_name(int8_t mode) {
   switch(mode) {
     case MODE_L_NOTE_R_CC: return "L:N | R:CC";
     case MODE_L_NOTE_R_CC_INVERTED: return "L:N | R:CC(I)";
@@ -62,10 +63,11 @@ char* get_mode_name(int8_t mode) {
     case MODE_L_CC_INVERTED_R_NOTE: return "L:CC(I) | R:N";
     case MODE_L_VELOCITY_R_NOTE: return "L:V | R:N";
     case MODE_L_VELOCITY_INVERTED_R_NOTE: return "L:V(I) | R:N";
+    default: return "";
   }
 }
 
-char* get_scale_name(int8_t index) {
+const char* get_scale_name(int8_t index) {
   return SCALES[index].name;
 }
 

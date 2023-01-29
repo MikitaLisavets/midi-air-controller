@@ -14,7 +14,7 @@ StaticThreadController<5> main_thread (&thread_display, &thread_distance, &threa
 
 // === Scales ===
 struct scale_t {
-  char* name;
+  const char* name;
   int8_t size;
   int8_t* steps;
 };
@@ -100,8 +100,8 @@ uint8_t global_previous_control_value = 0;
 uint8_t global_current_control_value = 0;
 
 uint16_t global_distance_step = 15;
-uint8_t global_min_distance = 30;
-uint16_t global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
+int16_t global_min_distance = 30;
+int16_t global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
 
 uint8_t global_velocity = 64;
 uint8_t global_previous_velocity = 64;

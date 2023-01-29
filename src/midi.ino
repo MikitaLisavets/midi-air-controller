@@ -1,17 +1,17 @@
 #include "MIDIUSB.h" // Source: https://github.com/arduino-libraries/MIDIUSB
 
 void note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
-  midiEventPacket_t noteOn = {0x09, 0x90 | channel, pitch, velocity};
+  midiEventPacket_t noteOn = {0x09, (uint8_t)(0x90 | channel), pitch, velocity};
   MidiUSB.sendMIDI(noteOn);
 }
 
 void note_off(uint8_t channel, uint8_t pitch, uint8_t velocity) {
-  midiEventPacket_t noteOff = {0x08, 0x80 | channel, pitch, velocity};
+  midiEventPacket_t noteOff = {0x08, (uint8_t)(0x80 | channel), pitch, velocity};
   MidiUSB.sendMIDI(noteOff);
 }
 
 void control_change(uint8_t channel, uint8_t control, uint8_t value) {
-  midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
+  midiEventPacket_t event = {0x0B, (uint8_t)(0xB0 | channel), control, value};
   MidiUSB.sendMIDI(event);
 }
 
@@ -19,8 +19,8 @@ uint8_t getNoteOffset(uint8_t note_index) {
   int offset = 0;
 
   for (uint8_t i = 0; i < note_index; i++) {
-    byte scale_step_index = i % SCALES[global_current_scale_index].size;
-    byte scale_step = SCALES[global_current_scale_index].steps[scale_step_index];
+    int8_t scale_step_index = i % SCALES[global_current_scale_index].size;
+    int8_t scale_step = SCALES[global_current_scale_index].steps[scale_step_index];
     offset = offset + scale_step;
   }
 
@@ -92,7 +92,7 @@ void midi_cc(int16_t current_distance, bool is_inverted) {
 
   global_current_control_value = get_midi_value(current_distance, is_inverted);
 
-  if (global_current_control_value == 0 && is_inverted || global_current_control_value == 127 && !is_inverted) {
+  if ((global_current_control_value == 0 && is_inverted) || (global_current_control_value == 127 && !is_inverted)) {
     global_current_control_value = global_previous_control_value;
   }
 
@@ -106,7 +106,7 @@ void midi_cc(int16_t current_distance, bool is_inverted) {
 void midi_velocity(int16_t current_distance, bool is_inverted) {
   global_velocity = get_midi_value(current_distance, is_inverted);
 
-  if (global_velocity == 0 && is_inverted || global_velocity == 127 && !is_inverted) {
+  if ((global_velocity == 0 && is_inverted) || (global_velocity == 127 && !is_inverted)) {
     global_velocity = global_previous_velocity;
   }
 
