@@ -108,7 +108,7 @@ void render_top_bar() {
 void render_menu() {
   for (byte i = 0; i < SCREEN_MENU_ROWS; i++) {
     if (global_menu_selected_row < SCREEN_MENU_ROWS) {
-      render_row(i);      
+      render_row(i);
     } else {
       render_row(global_menu_selected_row - SCREEN_MENU_ROWS + 1 + i);  
     }
