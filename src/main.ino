@@ -7,6 +7,8 @@ void setup() {
   setup_distance(); // NOTE: Setup VL53L0X only after display
   setup_controls();
 
+  toggle_leds();
+
   thread_display.onRun(loop_display);
   thread_distance.onRun(loop_distance);
   thread_midi_left.onRun(loop_midi_left);

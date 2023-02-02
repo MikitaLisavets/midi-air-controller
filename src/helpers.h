@@ -14,5 +14,6 @@ void set_bpm(int16_t bpm);
 void set_note_duration(int8_t note_duration);
 void set_root_note(int8_t note);
 void set_control_change(int8_t cc);
+void toggle_leds();
 
 #endif

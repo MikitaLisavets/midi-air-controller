@@ -83,3 +83,13 @@ void set_control_change(int8_t cc) {
 
   global_control_change = cc % MIDI_MAX;
 }
+
+void toggle_leds() {
+  if (global_is_led_enabled) {
+    pinMode(LED_BUILTIN_TX, OUTPUT);
+    pinMode(LED_BUILTIN_RX, OUTPUT);
+  } else {
+    pinMode(LED_BUILTIN_TX, INPUT);
+    pinMode(LED_BUILTIN_RX, INPUT);
+  }
+}

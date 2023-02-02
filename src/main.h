@@ -127,6 +127,7 @@ uint8_t global_mode = 0;
 uint8_t global_menu_selected_row = 0;
 
 bool global_is_display_enabled = true;
+bool global_is_led_enabled = false;
 // =========================
 
 #endif

@@ -99,6 +99,11 @@ void loop_controls() {
     clear_display();
   }
 
+  if (digitalRead(BUTTON_LEFT) == LOW && digitalRead(BUTTON_RIGHT) == LOW) {
+    global_is_led_enabled = !global_is_led_enabled;
+    toggle_leds();
+  }
+
   if (digitalRead(BUTTON_LEFT) == LOW) {
     handle_press_left();
   } else if (digitalRead(BUTTON_RIGHT) == LOW) {
