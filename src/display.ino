@@ -190,9 +190,16 @@ void render_row_control_change() {
   display.println(global_control_change);
 }
 
-void loop_display() {
+void clear_display() {
   display.clearDisplay();
-  render_top_bar();
-  render_menu();
   display.display();
+}
+
+void loop_display() {
+  if (global_is_display_enabled) {
+    display.clearDisplay();
+    render_top_bar();
+    render_menu();
+    display.display();
+  }
 }

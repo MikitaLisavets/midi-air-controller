@@ -94,6 +94,11 @@ void loop_controls() {
   control_timer = millis();
   control_status = NONE;
 
+  if (digitalRead(BUTTON_UP) == LOW && digitalRead(BUTTON_DOWN) == LOW) {
+    global_is_display_enabled = !global_is_display_enabled;
+    clear_display();
+  }
+
   if (digitalRead(BUTTON_LEFT) == LOW) {
     handle_press_left();
   } else if (digitalRead(BUTTON_RIGHT) == LOW) {
