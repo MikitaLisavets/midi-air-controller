@@ -56,6 +56,7 @@ const char* get_scale_name(int8_t index) {
 
 void render_top_bar() {
   display.setTextColor(WHITE);
+  display.setCursor(0, 0);
 
   switch(global_mode) {
     case MODE_L_NOTE_R_CC:;
@@ -63,7 +64,7 @@ void render_top_bar() {
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
       display.print(get_note_octave(global_current_note));
-      display.print(F(" | "));
+      display.setCursor(SCREEN_WIDTH - 7 * SCREEN_FONT_WIDTH, 0);
       display.print(F("CC: "));
       display.print(global_current_control_value);
       break;
@@ -72,7 +73,7 @@ void render_top_bar() {
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
       display.print(get_note_octave(global_current_note));
-      display.print(F(" | "));
+      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
       display.print(F("V: "));
       display.print(global_velocity);
       break;
@@ -80,7 +81,7 @@ void render_top_bar() {
     case MODE_L_CC_INVERTED_R_NOTE:
       display.print(F("CC: "));
       display.print(global_current_control_value);
-      display.print(F(" | "));
+      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
       display.print(get_note_octave(global_current_note));
@@ -89,7 +90,7 @@ void render_top_bar() {
     case MODE_L_VELOCITY_INVERTED_R_NOTE:
       display.print(F("V: "));
       display.print(global_velocity);
-      display.print(F(" | "));
+      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
       display.print(F("N: "));
       display.print(get_note_name(global_current_note));
       display.print(get_note_octave(global_current_note));
@@ -101,6 +102,8 @@ void render_top_bar() {
 }
 
 void render_menu() {
+  display.setCursor(0, SCREEN_FONT_HEIGHT * 2);
+
   for (byte i = 0; i < SCREEN_MENU_ROWS; i++) {
     if (global_menu_selected_row < SCREEN_MENU_ROWS) {
       render_row(i);
@@ -179,7 +182,6 @@ void render_row_control_change() {
 
 void loop_display() {
   display.clearDisplay();
-  display.setCursor(0, 0);
   render_top_bar();
   render_menu();
   display.display();
