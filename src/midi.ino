@@ -19,8 +19,8 @@ uint8_t getNoteOffset(uint8_t note_index) {
   int offset = 0;
 
   for (uint8_t i = 0; i < note_index; i++) {
-    int8_t scale_step_index = i % SCALES[global_current_scale_index].size;
-    int8_t scale_step = SCALES[global_current_scale_index].steps[scale_step_index];
+    int8_t scale_step_index = i % pgm_read_byte(&SCALES[global_current_scale_index].size);
+    int8_t scale_step = pgm_read_byte(&SCALES[global_current_scale_index].steps[scale_step_index]);
     offset = offset + scale_step;
   }
 

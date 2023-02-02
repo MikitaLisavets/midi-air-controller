@@ -6,14 +6,6 @@ void setup_display() {
   display.setTextSize(1);
 }
 
-void style_selected_row() {
-  display.setTextColor(BLACK, WHITE);
-}
-
-void style_default_row() {
-  display.setTextColor(WHITE);
-}
-
 const char* get_note_name(int8_t note) {
   if (note == -1) {
     return "";
@@ -59,11 +51,12 @@ const char* get_mode_name(int8_t mode) {
 }
 
 const char* get_scale_name(int8_t index) {
-  return SCALES[index].name;
+  return (const char*)pgm_read_word(&SCALES[index].name);
 }
 
 void render_top_bar() {
-  style_default_row();
+  display.setTextColor(WHITE);
+
   switch(global_mode) {
     case MODE_L_NOTE_R_CC:;
     case MODE_L_NOTE_R_CC_INVERTED:
@@ -120,9 +113,9 @@ void render_menu() {
 void render_row(int8_t row_index) {
   bool is_selected = row_index == global_menu_selected_row;
   if (is_selected) {
-    style_selected_row();
+    display.setTextColor(BLACK, WHITE);
   } else {
-    style_default_row();
+    display.setTextColor(WHITE);
   }
 
   switch(row_index) {

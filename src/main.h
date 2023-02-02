@@ -24,33 +24,33 @@ Thread thread_controls;
 // === Scales ===
 struct scale_t {
   const char* name;
-  uint8_t size;
-  uint8_t* steps;
+  const uint8_t size;
+  const uint8_t steps[7];
 };
 
-const scale_t SCALES[] = {
-  { "Major",         7, new uint8_t[7]{2,2,1,2,2,2,1} },
-  { "Natural Min",   7, new uint8_t[7]{2,1,2,2,1,2,2} },
-  { "Harmonic Maj",  7, new uint8_t[7]{2,2,1,2,1,3,1} },
-  { "Harmonic Min",  7, new uint8_t[7]{2,1,2,2,1,2,2} },
-  { "Melodic Min",   7, new uint8_t[7]{2,1,2,2,2,2,1} },
-  { "Dorian",        7, new uint8_t[7]{2,1,2,2,2,1,2} },
-  { "Phrygian",      7, new uint8_t[7]{1,2,2,2,1,2,2} },
-  { "Lydian",        7, new uint8_t[7]{2,2,2,1,2,2,1} },
-  { "Mixolydian",    7, new uint8_t[7]{2,2,1,2,2,1,2} },
-  { "Locrian",       7, new uint8_t[7]{1,2,2,1,2,2,2} },
-  { "Ahava Raba",    7, new uint8_t[7]{1,3,1,2,1,2,2} },
-  { "Pent Maj",      5, new uint8_t[5]{2,2,3,2,3} },
-  { "Pent Min",      5, new uint8_t[5]{3,2,2,3,2} },
-  { "Blues",         6, new uint8_t[6]{3,2,1,1,3,2} },
-  { "Whole tone",    1, new uint8_t[1]{2} },
-  { "Diminished",    2, new uint8_t[2]{1,2} },
-  { "Hungarian Min", 7, new uint8_t[7]{2,1,3,1,1,3,1} },
-  { "Japanese",      5, new uint8_t[5]{1,4,2,3,2} },
-  { "Hirajoshi",     5, new uint8_t[5]{2,1,4,1,4} },
-  { "Iwato",         5, new uint8_t[5]{1,4,1,4,2} },
-  { "Yo",            5, new uint8_t[5]{2,3,2,2,3} },
-  { "Chromatic",     1, new uint8_t[1]{1} },
+const scale_t SCALES[] PROGMEM = {
+  { "Major",         7, {2,2,1,2,2,2,1} },
+  { "Natural Min",   7, {2,1,2,2,1,2,2} },
+  { "Harmonic Maj",  7, {2,2,1,2,1,3,1} },
+  { "Harmonic Min",  7, {2,1,2,2,1,2,2} },
+  { "Melodic Min",   7, {2,1,2,2,2,2,1} },
+  { "Dorian",        7, {2,1,2,2,2,1,2} },
+  { "Phrygian",      7, {1,2,2,2,1,2,2} },
+  { "Lydian",        7, {2,2,2,1,2,2,1} },
+  { "Mixolydian",    7, {2,2,1,2,2,1,2} },
+  { "Locrian",       7, {1,2,2,1,2,2,2} },
+  { "Ahava Raba",    7, {1,3,1,2,1,2,2} },
+  { "Pent Maj",      5, {2,2,3,2,3} },
+  { "Pent Min",      5, {3,2,2,3,2} },
+  { "Blues",         6, {3,2,1,1,3,2} },
+  { "Whole tone",    1, {2} },
+  { "Diminished",    2, {1,2} },
+  { "Hungarian Min", 7, {2,1,3,1,1,3,1} },
+  { "Japanese",      5, {1,4,2,3,2} },
+  { "Hirajoshi",     5, {2,1,4,1,4} },
+  { "Iwato",         5, {1,4,1,4,2} },
+  { "Yo",            5, {2,3,2,2,3} },
+  { "Chromatic",     1, {1} }
 };
 // ==============
 
