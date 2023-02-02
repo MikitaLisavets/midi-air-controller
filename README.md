@@ -26,11 +26,12 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - "Yo"
   - "Chromatic"
 
-### 8 play modes
+### 9 play modes
   - Left hand: Notes               | Right hand: CC
   - Left hand: Notes               | Right hand: CC (Inverted)
   - Left hand: Notes               | Right hand: Velocity
   - Left hand: Notes               | Right hand: Velocity (Inverted)
+  - Left hand: Notes               | Right hand: Notes
   - Left hand: CC                  | Right hand: Notes
   - Left hand: CC (Inverted)       | Right hand: Notes
   - Left hand: Velocity            | Right hand: Notes

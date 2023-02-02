@@ -42,6 +42,7 @@ const char* get_mode_name(int8_t mode) {
     case MODE_L_NOTE_R_CC_INVERTED: return "L:N | R:CC(I)";
     case MODE_L_NOTE_R_VELOCITY: return "L:N | R:V";
     case MODE_L_NOTE_R_VELOCITY_INVERTED: return "L:N | R:V(I)";
+    case MODE_L_NOTE_R_NOTE: return "L:N | R:N";
     case MODE_L_CC_R_NOTE: return "L:CC | R:N";
     case MODE_L_CC_INVERTED_R_NOTE: return "L:CC(I) | R:N";
     case MODE_L_VELOCITY_R_NOTE: return "L:V | R:N";
@@ -76,6 +77,15 @@ void render_top_bar() {
       display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
       display.print(F("V: "));
       display.print(global_velocity);
+      break;
+    case MODE_L_NOTE_R_NOTE:
+      display.print(F("N: "));
+      display.print(get_note_name(global_current_left_note));
+      display.print(get_note_octave(global_current_left_note));
+      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
+      display.print(F("N: "));
+      display.print(get_note_name(global_current_right_note));
+      display.print(get_note_octave(global_current_right_note));
       break;
     case MODE_L_CC_R_NOTE:
     case MODE_L_CC_INVERTED_R_NOTE:

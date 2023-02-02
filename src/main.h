@@ -58,7 +58,7 @@ const scale_t SCALES[] PROGMEM = {
 const uint8_t MIDI_MIN = 0;
 const uint8_t MIDI_MAX = 127;
 const uint8_t DEFAULT_VELOCITY = 64;
-const uint8_t MAX_MODES = 8;
+const uint8_t MAX_MODES = 9;
 const uint8_t MAX_MENU_ROWS = 8;
 const uint8_t NUMBER_OF_SCALES = ARRAY_SIZE(SCALES);
 // =================
@@ -69,10 +69,11 @@ enum mode_t : uint8_t {
   MODE_L_NOTE_R_CC_INVERTED = 1,        // Left - Notes, Right - Control changes (Inverted)
   MODE_L_NOTE_R_VELOCITY = 2,           // Left - Notes, Right - Velocity
   MODE_L_NOTE_R_VELOCITY_INVERTED = 3,  // Left - Notes, Right - Velocity (Inverted)
-  MODE_L_CC_R_NOTE = 4,                 // Left - Control changes, Right - Notes
-  MODE_L_CC_INVERTED_R_NOTE = 5,        // Left - Control changes (Inverted), Right - Notes
-  MODE_L_VELOCITY_R_NOTE = 6,           // Left - Velocity, Right - Notes
-  MODE_L_VELOCITY_INVERTED_R_NOTE = 7   // Left - Velocity (Inverted), Right - Notes
+  MODE_L_NOTE_R_NOTE = 4,               // Left - Notes, Right - Notes
+  MODE_L_CC_R_NOTE = 5,                 // Left - Control changes, Right - Notes
+  MODE_L_CC_INVERTED_R_NOTE = 6,        // Left - Control changes (Inverted), Right - Notes
+  MODE_L_VELOCITY_R_NOTE = 7,           // Left - Velocity, Right - Notes
+  MODE_L_VELOCITY_INVERTED_R_NOTE = 8,  // Left - Velocity (Inverted), Right - Notes
 };
 // ==============
 
@@ -99,8 +100,12 @@ uint16_t global_current_distance_right = 0;
 uint8_t global_root_note = 36;
 int8_t global_note_index = -1;
 int8_t global_current_note = -1;
+int8_t global_current_left_note = -1;
+int8_t global_current_right_note = -1;
 int8_t global_previous_note = -1;
-uint8_t global_number_of_notes = 14;
+int8_t global_previous_left_note = -1;
+int8_t global_previous_right_note = -1;
+uint8_t global_number_of_notes = 15;
 
 uint8_t global_current_scale_index = 0;
 
