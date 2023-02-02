@@ -1,5 +1,7 @@
 #include <midi.h>
 
+uint32_t timer;
+
 void note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   midiEventPacket_t noteOn = {0x09, (uint8_t)(0x90 | channel), pitch, velocity};
   MidiUSB.sendMIDI(noteOn);
@@ -114,17 +116,22 @@ void midi_velocity(int16_t current_distance, bool is_inverted) {
 }
 
 void loop_midi_left() {
+  if (millis() - midi_left_timer <= (60000 / global_bpm) / global_note_duration) {
+    return;
+  } else {
+    midi_left_timer = millis();
+  }
   global_current_distance_left = global_dynamic_distance_left;
 
   switch(global_mode) {
     case MODE_L_NOTE_R_CC:
-      midi_note(global_current_distance_left);      
+      midi_note(global_current_distance_left);
       break;
     case MODE_L_NOTE_R_CC_INVERTED:
       midi_note(global_current_distance_left);
       break;
     case MODE_L_NOTE_R_VELOCITY:
-      midi_note(global_current_distance_left);      
+      midi_note(global_current_distance_left);
       break;
     case MODE_L_NOTE_R_VELOCITY_INVERTED:
       midi_note(global_current_distance_left);      
@@ -145,6 +152,12 @@ void loop_midi_left() {
 }
 
 void loop_midi_right() {
+  if (millis() - midi_right_timer <= (60000 / global_bpm) / global_note_duration) {
+    return;
+  } else {
+    midi_right_timer = millis();
+  }
+
   global_current_distance_right = global_dynamic_distance_right;
 
   switch(global_mode) {

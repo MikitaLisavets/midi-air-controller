@@ -53,14 +53,19 @@ void set_mode(int8_t mode) {
   global_mode = mode % MAX_MODES;
 }
 
-void set_interval(int16_t interval) {
-  if (interval < 0) {
-    interval = 0;
+void set_bpm(int16_t bpm) {
+  if (bpm < 0) {
+    bpm = 0;
+  }
+  global_bpm = bpm;
+}
+
+void set_note_duration(int8_t note_duration){
+  if (note_duration <= 0) {
+    note_duration = 1;
   }
 
-  global_interval = interval;
-  thread_midi_left.setInterval(global_interval);
-  thread_midi_right.setInterval(global_interval);
+  global_note_duration = note_duration;
 }
 
 void set_root_note(int8_t note) {

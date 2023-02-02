@@ -26,8 +26,11 @@ void handle_press_right() {
     case MENU_DISTANCE_STEP:
         set_distance_step(global_distance_step + 5);
         break;
-    case MENU_INTERVAL:
-        set_interval(global_interval + 5);
+    case MENU_BPM:
+        set_bpm(global_bpm + 1);
+        break;
+    case MENU_NOTE_DURATION:
+        set_note_duration(global_note_duration + 1);
         break;
     case MENU_MIDI:
         set_midi_channel(global_midi_channel + 1);
@@ -57,8 +60,11 @@ void handle_press_left() {
     case MENU_DISTANCE_STEP:
         set_distance_step(global_distance_step - 5);
         break;
-    case MENU_INTERVAL:
-        set_interval(global_interval - 5);
+    case MENU_BPM:
+        set_bpm(global_bpm - 1);
+        break;
+    case MENU_NOTE_DURATION:
+        set_note_duration(global_note_duration - 1);
         break;
     case MENU_MIDI:
         set_midi_channel(global_midi_channel - 1);
@@ -81,11 +87,11 @@ void handle_press_down() {
 }
 
 void loop_controls() {
-  if (millis() < timer + TIMER_TIMEOUT && control_status != NONE) {
+  if (millis() < control_timer + TIMER_TIMEOUT && control_status != NONE) {
     return;
   }
 
-  timer = millis();
+  control_timer = millis();
   control_status = NONE;
 
   if (digitalRead(BUTTON_LEFT) == LOW) {

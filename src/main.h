@@ -83,9 +83,10 @@ enum menu_t : uint8_t {
   MENU_MODE = 2,
   MENU_NOTES = 3,
   MENU_DISTANCE_STEP = 4,
-  MENU_INTERVAL = 5,
-  MENU_MIDI = 6,
-  MENU_CC = 7,
+  MENU_BPM = 5,
+  MENU_NOTE_DURATION = 6,
+  MENU_MIDI = 7,
+  MENU_CC = 8,
 };
 // ============
 
@@ -103,7 +104,8 @@ uint8_t global_number_of_notes = 14;
 
 uint8_t global_current_scale_index = 0;
 
-uint8_t global_interval = 120;
+uint8_t global_bpm = 120;
+uint8_t global_note_duration = 4;
 uint8_t global_midi_channel = 0;
 uint8_t global_control_change = 0;
 uint8_t global_previous_control_value = 0;

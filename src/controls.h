@@ -21,7 +21,7 @@ const uint16_t CENTER_VALUE = 500;
 const uint16_t THRESHOLD = 250;
 
 uint8_t control_status = NONE;
-uint32_t timer;
+uint32_t control_timer;
 
 void setup_controls();
 void loop_controls();

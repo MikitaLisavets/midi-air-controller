@@ -40,8 +40,8 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - Root note
   - Amount of notes in a scale
   - Range of a note in mm
+  - BPM and note duration
   - MIDI and CC channels
-  - Minimal interval of MIDI events
 
 ### GUI settings
 <img width="500" alt="gui" src="https://user-images.githubusercontent.com/1909810/215356042-34e8f1f8-ade0-41f2-b220-296a29bea31d.jpeg">
