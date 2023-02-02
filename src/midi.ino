@@ -134,10 +134,10 @@ void loop_midi_left() {
       midi_note(global_current_distance_left);
       break;
     case MODE_L_NOTE_R_VELOCITY_INVERTED:
-      midi_note(global_current_distance_left);      
+      midi_note(global_current_distance_left);
       break;
     case MODE_L_CC_R_NOTE:
-      midi_cc(global_current_distance_left, false);    
+      midi_cc(global_current_distance_left, false);
       break;
     case MODE_L_CC_INVERTED_R_NOTE:
       midi_cc(global_current_distance_left, true);
@@ -161,29 +161,29 @@ void loop_midi_right() {
   global_current_distance_right = global_dynamic_distance_right;
 
   switch(global_mode) {
-    case MODE_L_NOTE_R_CC:  
+    case MODE_L_NOTE_R_CC:
       midi_cc(global_current_distance_right, false);
       break;
-    case MODE_L_NOTE_R_CC_INVERTED:   
+    case MODE_L_NOTE_R_CC_INVERTED:
       midi_cc(global_current_distance_right, true);
       break;
-    case MODE_L_NOTE_R_VELOCITY:    
+    case MODE_L_NOTE_R_VELOCITY:
       midi_velocity(global_current_distance_right, false);
       break;
-    case MODE_L_NOTE_R_VELOCITY_INVERTED:    
+    case MODE_L_NOTE_R_VELOCITY_INVERTED:
       midi_velocity(global_current_distance_right, true);
       break;
     case MODE_L_CC_R_NOTE:
-      midi_note(global_current_distance_right);      
+      midi_note(global_current_distance_right);
       break;
     case MODE_L_CC_INVERTED_R_NOTE:
-      midi_note(global_current_distance_right);  
+      midi_note(global_current_distance_right);
       break;
     case MODE_L_VELOCITY_R_NOTE:
-      midi_note(global_current_distance_right);      
+      midi_note(global_current_distance_right);
       break;
     case MODE_L_VELOCITY_INVERTED_R_NOTE:
-      midi_note(global_current_distance_right);    
+      midi_note(global_current_distance_right);
       break;
   }
 }
