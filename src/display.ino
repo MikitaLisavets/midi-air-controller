@@ -3,6 +3,7 @@
 void setup_display() {
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
   display.clearDisplay();
+  display.setTextSize(1);
 }
 
 void style_selected_row() {
@@ -62,6 +63,7 @@ const char* get_scale_name(int8_t index) {
 }
 
 void render_top_bar() {
+  style_default_row();
   switch(global_mode) {
     case MODE_L_NOTE_R_CC:;
     case MODE_L_NOTE_R_CC_INVERTED:
@@ -179,12 +181,7 @@ void render_row_control_change() {
 void loop_display() {
   display.clearDisplay();
   display.setCursor(0, 0);
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-
   render_top_bar();
-
   render_menu();
-
   display.display();
 }
