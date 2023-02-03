@@ -120,8 +120,8 @@ uint16_t global_max_distance[2] = {
   (global_min_distance[RIGHT_SIDE] + global_distance_step[RIGHT_SIDE] * global_number_of_notes[RIGHT_SIDE])
 };
 
-uint8_t global_velocity[2] = {DEFAULT_VELOCITY, DEFAULT_VELOCITY};
-uint8_t global_previous_velocity[2] = {DEFAULT_VELOCITY, DEFAULT_VELOCITY};
+uint8_t global_velocity = DEFAULT_VELOCITY;
+uint8_t global_previous_velocity = DEFAULT_VELOCITY;
 
 bool global_is_display_enabled = true;
 bool global_is_led_enabled = false;

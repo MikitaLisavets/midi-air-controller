@@ -59,17 +59,17 @@ void midi_note(uint8_t side) {
   }
 
   if (global_current_note[side] == -1) {
-    note_off(global_midi_channel[side], global_previous_note[side], global_velocity[side]);
+    note_off(global_midi_channel[side], global_previous_note[side], global_velocity);
 
     global_previous_note[side] = global_current_note[side];
 
     MidiUSB.flush();
   } else {
-    note_off(global_midi_channel[side], global_previous_note[side], global_velocity[side]);
+    note_off(global_midi_channel[side], global_previous_note[side], global_velocity);
 
     global_previous_note[side] = global_current_note[side];
 
-    note_on(global_midi_channel[side], global_current_note[side], global_velocity[side]);
+    note_on(global_midi_channel[side], global_current_note[side], global_velocity);
     MidiUSB.flush();
   }
 }
@@ -88,8 +88,8 @@ uint8_t get_midi_value(uint8_t side, bool is_inverted) {
 }
 
 void midi_cc(uint8_t side, bool is_inverted) {
-  global_velocity[side] = DEFAULT_VELOCITY;
-  global_previous_velocity[side] = DEFAULT_VELOCITY;
+  global_velocity = DEFAULT_VELOCITY;
+  global_previous_velocity = DEFAULT_VELOCITY;
 
   global_current_control_value[side] = get_midi_value(side, is_inverted);
 
@@ -105,13 +105,13 @@ void midi_cc(uint8_t side, bool is_inverted) {
 }
 
 void midi_velocity(uint8_t side, bool is_inverted) {
-  global_velocity[side] = get_midi_value(side, is_inverted);
+  global_velocity = get_midi_value(side, is_inverted);
 
-  if ((global_velocity[side] == 0 && is_inverted) || (global_velocity[side] == 127 && !is_inverted)) {
-    global_velocity[side] = global_previous_velocity[side];
+  if ((global_velocity == 0 && is_inverted) || (global_velocity == 127 && !is_inverted)) {
+    global_velocity = global_previous_velocity;
   }
 
-  global_previous_velocity[side] = global_velocity[side];
+  global_previous_velocity = global_velocity;
 }
 
 void loop_midi_left() {

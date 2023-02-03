@@ -74,7 +74,7 @@ void render_top_bar() {
       case MODE_VELOCITY:
       case MODE_VELOCITY_INVERTED:
         display.print(F("V: "));
-        display.print(global_velocity[i]);
+        display.print(global_velocity);
         break;
     }
   }
