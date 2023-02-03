@@ -19,6 +19,6 @@ void setup_distance(){
 }
 
 void loop_distance() {
-  global_dynamic_distance_left = sensor_left.readRangeSingleMillimeters();
-  global_dynamic_distance_right = sensor_right.readRangeSingleMillimeters();
+  global_dynamic_distance[LEFT_SIDE] = sensor_left.readRangeSingleMillimeters();
+  global_dynamic_distance[RIGHT_SIDE] = sensor_right.readRangeSingleMillimeters();
 }

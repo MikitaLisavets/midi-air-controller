@@ -38,15 +38,11 @@ int8_t get_note_octave(int8_t note) {
 
 const char* get_mode_name(int8_t mode) {
   switch(mode) {
-    case MODE_L_NOTE_R_CC: return "L:N | R:CC";
-    case MODE_L_NOTE_R_CC_INVERTED: return "L:N | R:CC(I)";
-    case MODE_L_NOTE_R_VELOCITY: return "L:N | R:V";
-    case MODE_L_NOTE_R_VELOCITY_INVERTED: return "L:N | R:V(I)";
-    case MODE_L_NOTE_R_NOTE: return "L:N | R:N";
-    case MODE_L_CC_R_NOTE: return "L:CC | R:N";
-    case MODE_L_CC_INVERTED_R_NOTE: return "L:CC(I) | R:N";
-    case MODE_L_VELOCITY_R_NOTE: return "L:V | R:N";
-    case MODE_L_VELOCITY_INVERTED_R_NOTE: return "L:V(I) | R:N";
+    case MODE_NOTE: return "Note";
+    case MODE_CC: return "CC";
+    case MODE_CC_INVERTED: return "CC (Inv)";
+    case MODE_VELOCITY: return "Velocity";
+    case MODE_VELOCITY_INVERTED: return "Velocity (Inv)";
     default: return "";
   }
 }
@@ -59,53 +55,32 @@ void render_top_bar() {
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
 
-  switch(global_mode) {
-    case MODE_L_NOTE_R_CC:;
-    case MODE_L_NOTE_R_CC_INVERTED:
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_note));
-      display.print(get_note_octave(global_current_note));
-      display.setCursor(SCREEN_WIDTH - 7 * SCREEN_FONT_WIDTH, 0);
-      display.print(F("CC: "));
-      display.print(global_current_control_value);
-      break;
-    case MODE_L_NOTE_R_VELOCITY:
-    case MODE_L_NOTE_R_VELOCITY_INVERTED:
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_note));
-      display.print(get_note_octave(global_current_note));
+  for (uint8_t i = 0; i < 2; i++) {
+    if (i == RIGHT_SIDE) {
       display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
-      display.print(F("V: "));
-      display.print(global_velocity);
-      break;
-    case MODE_L_NOTE_R_NOTE:
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_left_note));
-      display.print(get_note_octave(global_current_left_note));
-      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_right_note));
-      display.print(get_note_octave(global_current_right_note));
-      break;
-    case MODE_L_CC_R_NOTE:
-    case MODE_L_CC_INVERTED_R_NOTE:
-      display.print(F("CC: "));
-      display.print(global_current_control_value);
-      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_note));
-      display.print(get_note_octave(global_current_note));
-      break;
-    case MODE_L_VELOCITY_R_NOTE:
-    case MODE_L_VELOCITY_INVERTED_R_NOTE:
-      display.print(F("V: "));
-      display.print(global_velocity);
-      display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
-      display.print(F("N: "));
-      display.print(get_note_name(global_current_note));
-      display.print(get_note_octave(global_current_note));
-      break;
+    }
+
+    switch(global_mode[i]) {
+      case MODE_NOTE:
+        display.print(F("N: "));
+        display.print(get_note_name(global_current_note[i]));
+        display.print(get_note_octave(global_current_note[i]));
+        break;
+      case MODE_CC:
+      case MODE_CC_INVERTED:
+        display.print(F("C: "));
+        display.print(global_current_control_value[i]);
+        break;
+      case MODE_VELOCITY:
+      case MODE_VELOCITY_INVERTED:
+        display.print(F("V: "));
+        display.print(global_velocity[i]);
+        break;
+    }
   }
+
+  display.setCursor((SCREEN_WIDTH / 2) - 15, 0);
+  display.print(global_side == LEFT_SIDE ? F("LEFT") : F("RIGHT"));
 
   display.println();
   display.println(F("---------------------"));
@@ -132,6 +107,7 @@ void render_row(int8_t row_index) {
   }
 
   switch(row_index) {
+    case MENU_SIDE: return render_row_side();
     case MENU_ROOT_NOTE: return render_row_root_note();
     case MENU_SCALE: return render_row_scale();
     case MENU_MODE: return render_row_mode();
@@ -144,50 +120,55 @@ void render_row(int8_t row_index) {
   }
 }
 
+void render_row_side() {
+  display.print(F("Side: "));
+  display.println(global_side == LEFT_SIDE ? F("Left") : F("Right"));
+}
+
 void render_row_root_note() {
   display.print(F("Root note: "));
-  display.print(get_note_name(global_root_note));
-  display.println(get_note_octave(global_root_note));
+  display.print(get_note_name(global_root_note[global_side]));
+  display.println(get_note_octave(global_root_note[global_side]));
 }
 
 void render_row_scale() {
   display.print(F("Scale: "));
-  display.println(get_scale_name(global_current_scale_index));
+  display.println(get_scale_name(global_current_scale_index[global_side]));
 }
 
 void render_row_mode() {
   display.print(F("Mode: "));
-  display.println(get_mode_name(global_mode));
+  display.println(get_mode_name(global_mode[global_side]));
 }
 
 void render_row_notes() {
   display.print(F("Notes: "));
-  display.println(global_number_of_notes);
+  display.println(global_number_of_notes[global_side]);
 }
 
 void render_row_distance_step() {
   display.print(F("Distance step: "));
-  display.println(global_distance_step);
+  display.println(global_distance_step[global_side]);
 }
 
 void render_row_bpm() {
   display.print(F("BPM: "));
-  display.println(global_bpm);
+  display.println(global_bpm[global_side]);
 }
 
 void render_row_note_duration() {
   display.print(F("Note duration: 1/"));
-  display.println(global_note_duration);
+  display.println(global_note_duration[global_side]);
 }
 
 void render_row_midi() {
   display.print(F("MIDI Channel: "));
-  display.println(global_midi_channel);
+  display.println(global_midi_channel[global_side]);
 }
 
 void render_row_control_change() {
   display.print(F("Control change: "));
-  display.println(global_control_change);
+  display.println(global_control_change[global_side]);
 }
 
 void clear_display() {

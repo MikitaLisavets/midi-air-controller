@@ -56,75 +56,72 @@ const scale_t SCALES[] PROGMEM = {
 
 // === Constants ===
 const uint8_t MIDI_MIN = 0;
-const uint8_t MIDI_MAX = 127;
+const uint8_t MIDI_MAX = 128;
 const uint8_t DEFAULT_VELOCITY = 64;
-const uint8_t MAX_MODES = 9;
-const uint8_t MAX_MENU_ROWS = 8;
+const uint8_t MAX_MODES = 5;
+const uint8_t MAX_MENU_ROWS = 10;
 const uint8_t NUMBER_OF_SCALES = ARRAY_SIZE(SCALES);
+const uint8_t LEFT_SIDE = 0;
+const uint8_t RIGHT_SIDE = 1;
 // =================
 
 // === Modes ===
 enum mode_t : uint8_t {
-  MODE_L_NOTE_R_CC = 0,                 // Left - Notes, Right - Control changes
-  MODE_L_NOTE_R_CC_INVERTED = 1,        // Left - Notes, Right - Control changes (Inverted)
-  MODE_L_NOTE_R_VELOCITY = 2,           // Left - Notes, Right - Velocity
-  MODE_L_NOTE_R_VELOCITY_INVERTED = 3,  // Left - Notes, Right - Velocity (Inverted)
-  MODE_L_NOTE_R_NOTE = 4,               // Left - Notes, Right - Notes
-  MODE_L_CC_R_NOTE = 5,                 // Left - Control changes, Right - Notes
-  MODE_L_CC_INVERTED_R_NOTE = 6,        // Left - Control changes (Inverted), Right - Notes
-  MODE_L_VELOCITY_R_NOTE = 7,           // Left - Velocity, Right - Notes
-  MODE_L_VELOCITY_INVERTED_R_NOTE = 8,  // Left - Velocity (Inverted), Right - Notes
+  MODE_NOTE              = 0,
+  MODE_CC                = 1,
+  MODE_CC_INVERTED       = 2,
+  MODE_VELOCITY          = 3,
+  MODE_VELOCITY_INVERTED = 4
 };
 // ==============
 
 // === Menu ===
 enum menu_t : uint8_t {
-  MENU_ROOT_NOTE = 0,
-  MENU_SCALE = 1,
-  MENU_MODE = 2,
-  MENU_NOTES = 3,
-  MENU_DISTANCE_STEP = 4,
-  MENU_BPM = 5,
+  MENU_SIDE = 0,
+  MENU_MODE = 1,
+  MENU_ROOT_NOTE = 2,
+  MENU_SCALE = 3,
+  MENU_NOTES = 4,
+  MENU_DISTANCE_STEP = 5,
   MENU_NOTE_DURATION = 6,
-  MENU_MIDI = 7,
-  MENU_CC = 8,
+  MENU_BPM = 7,
+  MENU_MIDI = 8,
+  MENU_CC = 9,
 };
 // ============
 
 // === Global Variables ===
-uint16_t global_dynamic_distance_left = 0;
-uint16_t global_dynamic_distance_right = 0;
-uint16_t global_current_distance_left = 0;
-uint16_t global_current_distance_right = 0;
-
-uint8_t global_root_note = 36;
-int8_t global_note_index = -1;
-int8_t global_current_note = -1;
-int8_t global_current_left_note = -1;
-int8_t global_current_right_note = -1;
-int8_t global_previous_note = -1;
-int8_t global_previous_left_note = -1;
-int8_t global_previous_right_note = -1;
-uint8_t global_number_of_notes = 15;
-
-uint8_t global_current_scale_index = 0;
-
-uint8_t global_bpm = 120;
-uint8_t global_note_duration = 4;
-uint8_t global_midi_channel = 0;
-uint8_t global_control_change = 0;
-uint8_t global_previous_control_value = 0;
-uint8_t global_current_control_value = 0;
-
-uint16_t global_distance_step = 15;
-int16_t global_min_distance = 30;
-int16_t global_max_distance = (global_min_distance + global_distance_step * global_number_of_notes);
-
-uint8_t global_velocity = 64;
-uint8_t global_previous_velocity = 64;
-
-uint8_t global_mode = 0;
+uint8_t global_side = LEFT_SIDE;
 uint8_t global_menu_selected_row = 0;
+uint8_t global_mode[2] = {0, 3};
+
+uint16_t global_dynamic_distance[2] = {0, 0};
+uint16_t global_current_distance[2] = {0, 0};
+
+uint8_t global_root_note[2] = {36, 24};
+int8_t global_note_index[2] = {-1, -1};
+int8_t global_current_note[2] = {-1, -1};
+int8_t global_previous_note[2] = {-1, -1};
+uint8_t global_number_of_notes[2] = {15, 8};
+
+uint8_t global_current_scale_index[2] = {0, 0};
+
+uint8_t global_bpm[2] = {120, 120};
+uint8_t global_note_duration[2] = {4, 4};
+uint8_t global_midi_channel[2] = {0, 0};
+uint8_t global_control_change[2] = {0, 1};
+uint8_t global_previous_control_value[2] = {0, 0};
+uint8_t global_current_control_value[2] = {0, 0};
+
+uint16_t global_distance_step[2] = {15, 30};
+uint16_t global_min_distance[2] = {30, 30};
+uint16_t global_max_distance[2] = {
+  (global_min_distance[LEFT_SIDE] + global_distance_step[LEFT_SIDE] * global_number_of_notes[LEFT_SIDE]),
+  (global_min_distance[RIGHT_SIDE] + global_distance_step[RIGHT_SIDE] * global_number_of_notes[RIGHT_SIDE])
+};
+
+uint8_t global_velocity[2] = {DEFAULT_VELOCITY, DEFAULT_VELOCITY};
+uint8_t global_previous_velocity[2] = {DEFAULT_VELOCITY, DEFAULT_VELOCITY};
 
 bool global_is_display_enabled = true;
 bool global_is_led_enabled = false;
