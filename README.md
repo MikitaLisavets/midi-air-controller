@@ -39,7 +39,7 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - MIDI and CC channels
 
 ### GUI settings
-<img width="500" alt="gui" src="https://user-images.githubusercontent.com/1909810/215356042-34e8f1f8-ade0-41f2-b220-296a29bea31d.jpeg">
+<img width="500" alt="gui" src="https://user-images.githubusercontent.com/1909810/216604352-0bc00215-5cad-4788-85b3-54b8e47a1313.jpeg">
 
 ## Connection scheme
 <img width="500" alt="scheme" src="https://user-images.githubusercontent.com/1909810/214956119-4ba645f4-ac2d-4603-9f38-8516719e28dc.png">
