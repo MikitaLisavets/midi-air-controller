@@ -11,32 +11,35 @@ void handle_press_right() {
   control_status = RIGHT;
 
   switch (global_menu_selected_row) {
+   case MENU_SIDE:
+        set_side(global_side + 1);
+        break;
    case MENU_ROOT_NOTE:
-        set_root_note(global_root_note + 1);
+        set_root_note(global_root_note[global_side] + 1);
         break;
     case MENU_SCALE:
-        set_current_scale_index(global_current_scale_index + 1);
+        set_current_scale_index(global_current_scale_index[global_side] + 1);
         break;
     case MENU_MODE:
-        set_mode(global_mode + 1);
+        set_mode(global_mode[global_side] + 1);
         break;
     case MENU_NOTES:
-        set_number_of_notes(global_number_of_notes + 1);
+        set_number_of_notes(global_number_of_notes[global_side] + 1);
         break;
     case MENU_DISTANCE_STEP:
-        set_distance_step(global_distance_step + 5);
+        set_distance_step(global_distance_step[global_side] + 5);
         break;
     case MENU_BPM:
-        set_bpm(global_bpm + 1);
+        set_bpm(global_bpm[global_side] + 1);
         break;
     case MENU_NOTE_DURATION:
-        set_note_duration(global_note_duration + 1);
+        set_note_duration(global_note_duration[global_side] + 1);
         break;
     case MENU_MIDI:
-        set_midi_channel(global_midi_channel + 1);
+        set_midi_channel(global_midi_channel[global_side] + 1);
         break;
     case MENU_CC:
-        set_control_change(global_control_change + 1);
+        set_control_change(global_control_change[global_side] + 1);
         break;
   }
 }
@@ -45,32 +48,35 @@ void handle_press_left() {
   control_status = LEFT;
 
   switch (global_menu_selected_row) {
+   case MENU_SIDE:
+        set_side(global_side - 1);
+        break;
     case MENU_ROOT_NOTE:
-        set_root_note(global_root_note - 1);
+        set_root_note(global_root_note[global_side] - 1);
         break;
     case MENU_SCALE:
-        set_current_scale_index(global_current_scale_index - 1);
+        set_current_scale_index(global_current_scale_index[global_side] - 1);
         break;
     case MENU_MODE:
-        set_mode(global_mode - 1);
+        set_mode(global_mode[global_side] - 1);
         break;
     case MENU_NOTES:
-        set_number_of_notes(global_number_of_notes - 1);
+        set_number_of_notes(global_number_of_notes[global_side] - 1);
         break;
     case MENU_DISTANCE_STEP:
-        set_distance_step(global_distance_step - 5);
+        set_distance_step(global_distance_step[global_side] - 5);
         break;
     case MENU_BPM:
-        set_bpm(global_bpm - 1);
+        set_bpm(global_bpm[global_side] - 1);
         break;
     case MENU_NOTE_DURATION:
-        set_note_duration(global_note_duration - 1);
+        set_note_duration(global_note_duration[global_side] - 1);
         break;
     case MENU_MIDI:
-        set_midi_channel(global_midi_channel - 1);
+        set_midi_channel(global_midi_channel[global_side] - 1);
         break;
     case MENU_CC:
-        set_control_change(global_control_change - 1);
+        set_control_change(global_control_change[global_side] - 1);
         break;
   }
 
@@ -97,11 +103,23 @@ void loop_controls() {
   if (digitalRead(BUTTON_UP) == LOW && digitalRead(BUTTON_DOWN) == LOW) {
     global_is_display_enabled = !global_is_display_enabled;
     clear_display();
+    return;
   }
 
   if (digitalRead(BUTTON_LEFT) == LOW && digitalRead(BUTTON_RIGHT) == LOW) {
     global_is_led_enabled = !global_is_led_enabled;
     toggle_leds();
+    return;
+  }
+
+  if (digitalRead(BUTTON_UP) == LOW && digitalRead(BUTTON_LEFT) == LOW) {
+    set_side(global_side + 1);
+    return;
+  }
+
+  if (digitalRead(BUTTON_DOWN) == LOW && digitalRead(BUTTON_RIGHT) == LOW) {
+    set_side(global_side + 1);
+    return;
   }
 
   if (digitalRead(BUTTON_LEFT) == LOW) {

@@ -15,10 +15,10 @@ const uint8_t RIGHT = 4;
 const uint8_t PRESS = 5;
 const uint8_t NONE = 0;
 
-const uint16_t TIMER_TIMEOUT = 200;
+const uint8_t TIMER_TIMEOUT = 200;
 
 const uint16_t CENTER_VALUE = 500;
-const uint16_t THRESHOLD = 250;
+const uint8_t THRESHOLD = 250;
 
 uint8_t control_status = NONE;
 uint32_t control_timer;
