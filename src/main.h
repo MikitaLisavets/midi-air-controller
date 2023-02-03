@@ -102,7 +102,7 @@ uint8_t global_root_note[2] = {36, 24};
 int8_t global_note_index[2] = {-1, -1};
 int8_t global_current_note[2] = {-1, -1};
 int8_t global_previous_note[2] = {-1, -1};
-uint8_t global_number_of_notes[2] = {15, 5};
+uint8_t global_number_of_notes[2] = {15, 8};
 
 uint8_t global_current_scale_index[2] = {0, 0};
 
