@@ -101,24 +101,16 @@ void loop_controls() {
   control_status = NONE;
 
   if (digitalRead(BUTTON_UP) == LOW && digitalRead(BUTTON_DOWN) == LOW) {
+    control_status = UP_DOWN;
     global_is_display_enabled = !global_is_display_enabled;
     clear_display();
     return;
   }
 
   if (digitalRead(BUTTON_LEFT) == LOW && digitalRead(BUTTON_RIGHT) == LOW) {
+    control_status = LEFT_RIGHT;
     global_is_led_enabled = !global_is_led_enabled;
     toggle_leds();
-    return;
-  }
-
-  if (digitalRead(BUTTON_UP) == LOW && digitalRead(BUTTON_LEFT) == LOW) {
-    set_side(global_side + 1);
-    return;
-  }
-
-  if (digitalRead(BUTTON_DOWN) == LOW && digitalRead(BUTTON_RIGHT) == LOW) {
-    set_side(global_side + 1);
     return;
   }
 

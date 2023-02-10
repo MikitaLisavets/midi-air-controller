@@ -13,6 +13,8 @@ const uint8_t DOWN = 2;
 const uint8_t LEFT = 3;
 const uint8_t RIGHT = 4;
 const uint8_t PRESS = 5;
+const uint8_t UP_DOWN = 6;
+const uint8_t LEFT_RIGHT = 7;
 const uint8_t NONE = 0;
 
 const uint8_t TIMER_TIMEOUT = 200;
