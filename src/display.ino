@@ -112,7 +112,7 @@ void render_row(int8_t row_index) {
     case MENU_MODE: return render_row_mode();
     case MENU_NOTES: return render_row_notes();
     case MENU_DISTANCE_STEP: return render_row_distance_step();
-    case MENU_NOTE_LENGTH: return render_row_note_length();
+    case MENU_NOTE_TIMEOUT: return render_row_note_timeout();
     case MENU_MIDI: return render_row_midi();
     case MENU_CC: return render_row_control_change();
     case MENU_LOAD: return render_row_load();
@@ -153,9 +153,9 @@ void render_row_distance_step() {
   display.println(settings.distance_step[settings.side]);
 }
 
-void render_row_note_length() {
-  display.print(F("Note length: "));
-  display.println(settings.note_length[settings.side]);
+void render_row_note_timeout() {
+  display.print(F("Note timeout: "));
+  display.println(settings.note_timeout[settings.side]);
 }
 
 void render_row_midi() {

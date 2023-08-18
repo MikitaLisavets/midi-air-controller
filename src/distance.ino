@@ -16,9 +16,15 @@ void setup_distance(){
   pinMode(VL53L0X_RIGHT_PIN, INPUT);
   sensor_right.init(true);
   sensor_right.setAddress(VL53L0X_RIGHT_ADDRESS);
+
+  sensor_left.setMeasurementTimingBudget(20000);
+  sensor_right.setMeasurementTimingBudget(20000);
 }
 
-void loop_distance() {
+void loop_distance_left() {
   global_dynamic_distance[LEFT_SIDE] = sensor_left.readRangeSingleMillimeters();
+}
+
+void loop_distance_right() {
   global_dynamic_distance[RIGHT_SIDE] = sensor_right.readRangeSingleMillimeters();
 }

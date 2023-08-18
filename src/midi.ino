@@ -115,16 +115,16 @@ void midi_velocity(uint8_t side, bool is_inverted) {
 }
 
 void loop_midi_left() {
-  if ((millis() - midi_timer[LEFT_SIDE]) < settings.note_length[LEFT_SIDE]) {
-    return;
-  }
+  bool isNoteActive = (millis() - midi_timer[LEFT_SIDE]) < settings.note_timeout[LEFT_SIDE];
 
-  midi_timer[LEFT_SIDE] = millis();
   global_current_distance[LEFT_SIDE] = global_dynamic_distance[LEFT_SIDE];
 
   switch(settings.mode[LEFT_SIDE]) {
     case MODE_NOTE:
-      midi_note(LEFT_SIDE);
+      if (!isNoteActive) {
+        midi_note(LEFT_SIDE);
+        midi_timer[LEFT_SIDE] = millis();
+      }
       break;
     case MODE_CC:
       midi_cc(LEFT_SIDE, false);
@@ -142,16 +142,16 @@ void loop_midi_left() {
 }
 
 void loop_midi_right() {
-  if ((millis() - midi_timer[RIGHT_SIDE]) < settings.note_length[RIGHT_SIDE]) {
-    return;
-  }
+  bool isNoteActive = (millis() - midi_timer[RIGHT_SIDE]) < settings.note_timeout[RIGHT_SIDE];
 
-  midi_timer[RIGHT_SIDE] = millis();
   global_current_distance[RIGHT_SIDE] = global_dynamic_distance[RIGHT_SIDE];
 
   switch(settings.mode[RIGHT_SIDE]) {
     case MODE_NOTE:
-      midi_note(RIGHT_SIDE);
+      if (!isNoteActive) {
+        midi_note(RIGHT_SIDE);
+        midi_timer[RIGHT_SIDE] = millis();
+      }
       break;
     case MODE_CC:
       midi_cc(RIGHT_SIDE, false);

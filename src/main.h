@@ -21,7 +21,8 @@
 #define STR_ADDR 0
 
 Thread thread_display;
-Thread thread_distance;
+Thread thread_distance_left;
+Thread thread_distance_right;
 Thread thread_midi_left;
 Thread thread_midi_right;
 Thread thread_controls;
@@ -88,7 +89,7 @@ enum menu_t : uint8_t {
   MENU_SCALE,
   MENU_NOTES,
   MENU_DISTANCE_STEP,
-  MENU_NOTE_LENGTH,
+  MENU_NOTE_TIMEOUT,
   MENU_MIDI,
   MENU_CC,
   MENU_LOAD,
@@ -106,7 +107,7 @@ struct Settings {
   uint8_t root_note[2];
   uint8_t number_of_notes[2];
   uint8_t scale_index[2];
-  uint8_t note_length[2];
+  uint16_t note_timeout[2];
   uint8_t midi_channel[2];
   uint8_t control_change[2];
   uint16_t distance_step[2];

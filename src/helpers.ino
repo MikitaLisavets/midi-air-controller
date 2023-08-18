@@ -70,12 +70,12 @@ void set_mode(int8_t mode) {
   settings.mode[settings.side] = mode % MAX_MODES;
 }
 
-void set_note_length(int16_t note_length){
-  if (note_length <= 0) {
-    note_length = 1;
+void set_note_timeout(uint16_t note_timeout){
+  if (note_timeout <= 0) {
+    note_timeout = 0;
   }
 
-  settings.note_length[settings.side] = note_length;
+  settings.note_timeout[settings.side] = note_timeout;
 }
 
 void set_root_note(int8_t note) {
@@ -113,7 +113,7 @@ void reset_settings() {
     .root_note = {36, 24},
     .number_of_notes = {15, 8},
     .scale_index = {0, 0},
-    .note_length = {130, 130},
+    .note_timeout = {120, 120},
     .midi_channel = {0, 0},
     .control_change = {0, 1},
     .distance_step = {15, 30},

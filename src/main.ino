@@ -1,6 +1,6 @@
 #include <main.h>
 
-StaticThreadController<5> main_thread (&thread_display, &thread_distance, &thread_midi_left, &thread_midi_right, &thread_controls);
+StaticThreadController<6> main_thread (&thread_display, &thread_distance_left, &thread_distance_right, &thread_midi_left, &thread_midi_right, &thread_controls);
 Settings settings;
 
 void setup() {
@@ -21,7 +21,8 @@ void setup() {
 
 
   thread_display.onRun(loop_display);
-  thread_distance.onRun(loop_distance);
+  thread_distance_left.onRun(loop_distance_left);
+  thread_distance_right.onRun(loop_distance_right);
   thread_midi_left.onRun(loop_midi_left);
   thread_midi_right.onRun(loop_midi_right);
   thread_controls.onRun(loop_controls);
