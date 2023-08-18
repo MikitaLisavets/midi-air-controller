@@ -4,10 +4,12 @@ StaticThreadController<5> main_thread (&thread_display, &thread_distance, &threa
 
 void setup() {
   setup_display();
-  setup_distance(); // NOTE: Setup VL53L0X only after display
+  setup_distance(); // NOTE: Setup VL53L0X after display only
   setup_controls();
 
   toggle_leds();
+
+  render_init_screen();
 
   thread_display.onRun(loop_display);
   thread_distance.onRun(loop_distance);

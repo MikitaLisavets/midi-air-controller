@@ -3,7 +3,6 @@
 void setup_display() {
   display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
   display.clearDisplay();
-  display.setTextSize(1);
 }
 
 const char* get_note_name(int8_t note) {
@@ -171,9 +170,39 @@ void render_row_control_change() {
   display.println(global_control_change[global_side]);
 }
 
+void render_init_screen() {
+  clear_display();
+  display.print(F("Version: "));
+  display.print(VERSION);
+  display.display();
+
+  display.setTextSize(2);
+  display.setCursor(30, 20);
+  display.print(F("X"));
+  display.display();
+  delay(100);
+  display.print(F("-"));
+  display.display();
+  delay(100);
+  display.print(F("A"));
+  display.display();
+  delay(100);
+  display.print(F("i"));
+  display.display();
+  delay(100);
+  display.print(F("r"));
+  display.display();
+  delay(1000);
+
+  clear_display();
+}
+
 void clear_display() {
   display.clearDisplay();
   display.display();
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(0, 0);
 }
 
 void loop_display() {

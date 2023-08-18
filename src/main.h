@@ -15,6 +15,8 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
+#define VERSION 1.01
+
 Thread thread_display;
 Thread thread_distance;
 Thread thread_midi_left;

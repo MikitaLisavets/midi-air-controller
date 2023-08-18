@@ -18,5 +18,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 void setup_display();
 void loop_display();
 void clear_display();
+void render_init_screen();
 
 #endif
