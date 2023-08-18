@@ -107,7 +107,7 @@ uint8_t global_number_of_notes[2] = {15, 8};
 
 uint8_t global_current_scale_index[2] = {0, 0};
 
-uint8_t global_note_length[2] = {100, 100};
+uint8_t global_note_length[2] = {130, 130};
 uint8_t global_midi_channel[2] = {0, 0};
 uint8_t global_control_change[2] = {0, 1};
 uint8_t global_previous_control_value[2] = {0, 0};
