@@ -2,7 +2,7 @@
 Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
 
 ## Features 
-### 22 musical scales:
+### 24 musical scales:
   - "Major"
   - "Natural Min"
   - "Harmonic Maj"
@@ -14,12 +14,14 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - "Mixolydian"
   - "Locrian"
   - "Ahava Raba"
+  - "Arabic"
   - "Pent Maj"
   - "Pent Min"
   - "Blues"
   - "Whole tone"
   - "Diminished"
   - "Hungarian Min"
+  - "Romanian Min"
   - "Japanese"
   - "Hirajoshi",
   - "Iwato"

@@ -16,7 +16,7 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define VERSION 1.03
+#define VERSION 1.04
 
 #define STR_ADDR 0
 
@@ -46,12 +46,14 @@ const scale_t SCALES[] PROGMEM = {
   { "Mixolydian",    7, {2,2,1,2,2,1,2} },
   { "Locrian",       7, {1,2,2,1,2,2,2} },
   { "Ahava Raba",    7, {1,3,1,2,1,2,2} },
+  { "Arabic",        7, {2,2,1,1,2,2,2} },
   { "Pent Maj",      5, {2,2,3,2,3} },
   { "Pent Min",      5, {3,2,2,3,2} },
   { "Blues",         6, {3,2,1,1,3,2} },
   { "Whole tone",    1, {2} },
   { "Diminished",    2, {1,2} },
   { "Hungarian Min", 7, {2,1,3,1,1,3,1} },
+  { "Romanian Min",  7, {2,1,3,1,2,1,2} },
   { "Japanese",      5, {1,4,2,3,2} },
   { "Hirajoshi",     5, {2,1,4,1,4} },
   { "Iwato",         5, {1,4,1,4,2} },
