@@ -61,7 +61,7 @@ const uint8_t MIDI_MIN = 0;
 const uint8_t MIDI_MAX = 128;
 const uint8_t DEFAULT_VELOCITY = 64;
 const uint8_t MAX_MODES = 5;
-const uint8_t MAX_MENU_ROWS = 10;
+const uint8_t MAX_MENU_ROWS = 9;
 const uint8_t NUMBER_OF_SCALES = ARRAY_SIZE(SCALES);
 const uint8_t LEFT_SIDE = 0;
 const uint8_t RIGHT_SIDE = 1;
@@ -85,8 +85,7 @@ enum menu_t : uint8_t {
   MENU_SCALE = 3,
   MENU_NOTES = 4,
   MENU_DISTANCE_STEP = 5,
-  MENU_NOTE_DURATION = 6,
-  MENU_BPM = 7,
+  MENU_NOTE_LENGTH = 6,
   MENU_MIDI = 8,
   MENU_CC = 9,
 };
@@ -108,8 +107,7 @@ uint8_t global_number_of_notes[2] = {15, 8};
 
 uint8_t global_current_scale_index[2] = {0, 0};
 
-uint8_t global_bpm[2] = {120, 120};
-uint8_t global_note_duration[2] = {4, 4};
+uint8_t global_note_length[2] = {100, 100};
 uint8_t global_midi_channel[2] = {0, 0};
 uint8_t global_control_change[2] = {0, 1};
 uint8_t global_previous_control_value[2] = {0, 0};

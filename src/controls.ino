@@ -29,11 +29,8 @@ void handle_press_right() {
     case MENU_DISTANCE_STEP:
         set_distance_step(global_distance_step[global_side] + 5);
         break;
-    case MENU_BPM:
-        set_bpm(global_bpm[global_side] + 1);
-        break;
-    case MENU_NOTE_DURATION:
-        set_note_duration(global_note_duration[global_side] + 1);
+    case MENU_NOTE_LENGTH:
+        set_note_length(global_note_length[global_side] + 1);
         break;
     case MENU_MIDI:
         set_midi_channel(global_midi_channel[global_side] + 1);
@@ -66,11 +63,8 @@ void handle_press_left() {
     case MENU_DISTANCE_STEP:
         set_distance_step(global_distance_step[global_side] - 5);
         break;
-    case MENU_BPM:
-        set_bpm(global_bpm[global_side] - 1);
-        break;
-    case MENU_NOTE_DURATION:
-        set_note_duration(global_note_duration[global_side] - 1);
+    case MENU_NOTE_LENGTH:
+        set_note_length(global_note_length[global_side] - 1);
         break;
     case MENU_MIDI:
         set_midi_channel(global_midi_channel[global_side] - 1);

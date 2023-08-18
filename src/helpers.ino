@@ -70,19 +70,12 @@ void set_mode(int8_t mode) {
   global_mode[global_side] = mode % MAX_MODES;
 }
 
-void set_bpm(int16_t bpm) {
-  if (bpm < 0) {
-    bpm = 0;
-  }
-  global_bpm[global_side] = bpm;
-}
-
-void set_note_duration(int8_t note_duration){
-  if (note_duration <= 0) {
-    note_duration = 1;
+void set_note_length(int16_t note_length){
+  if (note_length <= 0) {
+    note_length = 1;
   }
 
-  global_note_duration[global_side] = note_duration;
+  global_note_length[global_side] = note_length;
 }
 
 void set_root_note(int8_t note) {

@@ -14,8 +14,7 @@ void set_number_of_notes(int8_t number);
 void set_midi_channel(int8_t channel);
 void set_distance_step(int8_t step);
 void set_mode(int8_t mode);
-void set_bpm(int16_t bpm);
-void set_note_duration(int8_t note_duration);
+void set_note_length(int16_t note_length);
 void set_root_note(int8_t note);
 void set_control_change(int8_t cc);
 

@@ -112,8 +112,7 @@ void render_row(int8_t row_index) {
     case MENU_MODE: return render_row_mode();
     case MENU_NOTES: return render_row_notes();
     case MENU_DISTANCE_STEP: return render_row_distance_step();
-    case MENU_BPM: return render_row_bpm();
-    case MENU_NOTE_DURATION: return render_row_note_duration();
+    case MENU_NOTE_LENGTH: return render_row_note_length();
     case MENU_MIDI: return render_row_midi();
     case MENU_CC: return render_row_control_change();
   }
@@ -150,14 +149,9 @@ void render_row_distance_step() {
   display.println(global_distance_step[global_side]);
 }
 
-void render_row_bpm() {
-  display.print(F("BPM: "));
-  display.println(global_bpm[global_side]);
-}
-
-void render_row_note_duration() {
-  display.print(F("Note duration: 1/"));
-  display.println(global_note_duration[global_side]);
+void render_row_note_length() {
+  display.print(F("Note length: "));
+  display.println(global_note_length[global_side]);
 }
 
 void render_row_midi() {
