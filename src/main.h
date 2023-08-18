@@ -16,7 +16,7 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define VERSION 1.02
+#define VERSION 1.03
 
 #define STR_ADDR 0
 
