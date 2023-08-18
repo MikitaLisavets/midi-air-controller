@@ -18,4 +18,9 @@ void set_note_length(int16_t note_length);
 void set_root_note(int8_t note);
 void set_control_change(int8_t cc);
 
+void load_settings();
+void save_settings();
+void reset_settings();
+void toggle_auto_load_settings();
+
 #endif

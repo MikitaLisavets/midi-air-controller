@@ -19,5 +19,8 @@ void setup_display();
 void loop_display();
 void clear_display();
 void render_init_screen();
+void render_save_screen();
+void render_load_screen();
+void render_reset_screen();
 
 #endif

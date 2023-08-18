@@ -12,31 +12,46 @@ void handle_press_right() {
 
   switch (global_menu_selected_row) {
    case MENU_SIDE:
-        set_side(global_side + 1);
+        set_side(settings.side + 1);
         break;
    case MENU_ROOT_NOTE:
-        set_root_note(global_root_note[global_side] + 1);
+        set_root_note(settings.root_note[settings.side] + 1);
         break;
     case MENU_SCALE:
-        set_current_scale_index(global_current_scale_index[global_side] + 1);
+        set_current_scale_index(settings.scale_index[settings.side] + 1);
         break;
     case MENU_MODE:
-        set_mode(global_mode[global_side] + 1);
+        set_mode(settings.mode[settings.side] + 1);
         break;
     case MENU_NOTES:
-        set_number_of_notes(global_number_of_notes[global_side] + 1);
+        set_number_of_notes(settings.number_of_notes[settings.side] + 1);
         break;
     case MENU_DISTANCE_STEP:
-        set_distance_step(global_distance_step[global_side] + 5);
+        set_distance_step(settings.distance_step[settings.side] + 5);
         break;
     case MENU_NOTE_LENGTH:
-        set_note_length(global_note_length[global_side] + 1);
+        set_note_length(settings.note_length[settings.side] + 1);
         break;
     case MENU_MIDI:
-        set_midi_channel(global_midi_channel[global_side] + 1);
+        set_midi_channel(settings.midi_channel[settings.side] + 1);
         break;
     case MENU_CC:
-        set_control_change(global_control_change[global_side] + 1);
+        set_control_change(settings.control_change[settings.side] + 1);
+        break;
+    case MENU_SAVE:
+        save_settings();
+        render_save_screen();
+        break;
+    case MENU_LOAD:
+        load_settings();
+        render_load_screen();
+        break;
+    case MENU_RESET:
+        reset_settings();
+        render_reset_screen();
+        break;
+    case MENU_AUTO_LOAD_SETTINGS:
+        toggle_auto_load_settings();
         break;
   }
 }
@@ -46,31 +61,46 @@ void handle_press_left() {
 
   switch (global_menu_selected_row) {
    case MENU_SIDE:
-        set_side(global_side - 1);
+        set_side(settings.side - 1);
         break;
     case MENU_ROOT_NOTE:
-        set_root_note(global_root_note[global_side] - 1);
+        set_root_note(settings.root_note[settings.side] - 1);
         break;
     case MENU_SCALE:
-        set_current_scale_index(global_current_scale_index[global_side] - 1);
+        set_current_scale_index(settings.scale_index[settings.side] - 1);
         break;
     case MENU_MODE:
-        set_mode(global_mode[global_side] - 1);
+        set_mode(settings.mode[settings.side] - 1);
         break;
     case MENU_NOTES:
-        set_number_of_notes(global_number_of_notes[global_side] - 1);
+        set_number_of_notes(settings.number_of_notes[settings.side] - 1);
         break;
     case MENU_DISTANCE_STEP:
-        set_distance_step(global_distance_step[global_side] - 5);
+        set_distance_step(settings.distance_step[settings.side] - 5);
         break;
     case MENU_NOTE_LENGTH:
-        set_note_length(global_note_length[global_side] - 1);
+        set_note_length(settings.note_length[settings.side] - 1);
         break;
     case MENU_MIDI:
-        set_midi_channel(global_midi_channel[global_side] - 1);
+        set_midi_channel(settings.midi_channel[settings.side] - 1);
         break;
     case MENU_CC:
-        set_control_change(global_control_change[global_side] - 1);
+        set_control_change(settings.control_change[settings.side] - 1);
+        break;
+    case MENU_SAVE:
+        save_settings();
+        render_save_screen();
+        break;
+    case MENU_LOAD:
+        load_settings();
+        render_load_screen();
+        break;
+    case MENU_RESET:
+        reset_settings();
+        render_reset_screen();
+        break;
+    case MENU_AUTO_LOAD_SETTINGS:
+        toggle_auto_load_settings();
         break;
   }
 

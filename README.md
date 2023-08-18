@@ -37,6 +37,7 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - Range of a note in mm
   - Note length
   - MIDI and CC channels
+  - Save/Load settings
 
 ### GUI settings
 <img width="500" alt="gui" src="https://user-images.githubusercontent.com/1909810/216604352-0bc00215-5cad-4788-85b3-54b8e47a1313.jpeg">

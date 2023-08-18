@@ -18,7 +18,7 @@ void set_side(int side) {
   if (side < 0) {
     side = 1;
   }
-  global_side = side % 2;
+  settings.side = side % 2;
 }
 
 void set_selected_row(int8_t row) {
@@ -33,7 +33,7 @@ void set_current_scale_index(int8_t index) {
   if (index < 0) {
     index = NUMBER_OF_SCALES - 1;
   }
-  global_current_scale_index[global_side] = index % NUMBER_OF_SCALES;
+  settings.scale_index[settings.side] = index % NUMBER_OF_SCALES;
 }
 
 void set_number_of_notes(int8_t number) {
@@ -41,8 +41,8 @@ void set_number_of_notes(int8_t number) {
     number = MIDI_MAX - 1;
   }
 
-  global_number_of_notes[global_side] = number % MIDI_MAX;
-  global_max_distance[global_side] = (global_min_distance[global_side] + global_distance_step[global_side] * global_number_of_notes[global_side]);
+  settings.number_of_notes[settings.side] = number % MIDI_MAX;
+  global_max_distance[settings.side] = (global_min_distance[settings.side] + settings.distance_step[settings.side] * settings.number_of_notes[settings.side]);
 }
 
 void set_midi_channel(int8_t channel) {
@@ -50,7 +50,7 @@ void set_midi_channel(int8_t channel) {
     channel = MIDI_MAX - 1;
   }
 
-  global_midi_channel[global_side] = channel % MIDI_MAX;
+  settings.midi_channel[settings.side] = channel % MIDI_MAX;
 }
 
 void set_distance_step(int8_t step) {
@@ -58,8 +58,8 @@ void set_distance_step(int8_t step) {
     step = 0;
   }
 
-  global_distance_step[global_side] = step;
-  global_max_distance[global_side] = (global_min_distance[global_side] + global_distance_step[global_side] * global_number_of_notes[global_side]);
+  settings.distance_step[settings.side] = step;
+  global_max_distance[settings.side] = (global_min_distance[settings.side] + settings.distance_step[settings.side] * settings.number_of_notes[settings.side]);
 }
 
 void set_mode(int8_t mode) {
@@ -67,7 +67,7 @@ void set_mode(int8_t mode) {
     mode = MAX_MODES - 1;
   }
 
-  global_mode[global_side] = mode % MAX_MODES;
+  settings.mode[settings.side] = mode % MAX_MODES;
 }
 
 void set_note_length(int16_t note_length){
@@ -75,7 +75,7 @@ void set_note_length(int16_t note_length){
     note_length = 1;
   }
 
-  global_note_length[global_side] = note_length;
+  settings.note_length[settings.side] = note_length;
 }
 
 void set_root_note(int8_t note) {
@@ -83,7 +83,7 @@ void set_root_note(int8_t note) {
     note = MIDI_MAX - 1;
   }
 
-  global_root_note[global_side] = note % MIDI_MAX;
+  settings.root_note[settings.side] = note % MIDI_MAX;
 }
 
 void set_control_change(int8_t cc) {
@@ -91,5 +91,32 @@ void set_control_change(int8_t cc) {
     cc = MIDI_MAX - 1;
   }
 
-  global_control_change[global_side] = cc % MIDI_MAX;
+  settings.control_change[settings.side] = cc % MIDI_MAX;
+}
+
+void toggle_auto_load_settings() {
+  settings.autoLoadSettings = !settings.autoLoadSettings;
+}
+
+void load_settings() {
+  EEPROM.get(STR_ADDR, settings);
+}
+
+void save_settings() {
+  EEPROM.put(STR_ADDR, settings);
+}
+
+void reset_settings() {
+  settings = {
+    .side = LEFT_SIDE,
+    .mode = {0, 3},
+    .root_note = {36, 24},
+    .number_of_notes = {15, 8},
+    .scale_index = {0, 0},
+    .note_length = {130, 130},
+    .midi_channel = {0, 0},
+    .control_change = {0, 1},
+    .distance_step = {15, 30},
+    .autoLoadSettings = false,
+  };
 }

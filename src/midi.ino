@@ -17,7 +17,7 @@ void control_change(uint8_t channel, uint8_t control, uint8_t value) {
 
 uint8_t getNoteOffset(uint8_t side, uint8_t note_index) {
   uint8_t offset = 0;
-  int8_t scale_index = global_current_scale_index[side];
+  int8_t scale_index = settings.scale_index[side];
 
   for (uint8_t i = 0; i < note_index; i++) {
     int8_t scale_step_index = i % pgm_read_byte(&SCALES[scale_index].size);
@@ -31,16 +31,16 @@ uint8_t getNoteOffset(uint8_t side, uint8_t note_index) {
 uint8_t get_note(uint8_t side) {
   int8_t note = global_previous_note[side];
 
-  for (uint8_t i = 0; i < global_number_of_notes[side]; i++) {
-    int range_start = global_min_distance[side] + i * global_distance_step[side];
-    int range_end = global_min_distance[side] + (i + 1) * global_distance_step[side];
+  for (uint8_t i = 0; i < settings.number_of_notes[side]; i++) {
+    int range_start = global_min_distance[side] + i * settings.distance_step[side];
+    int range_end = global_min_distance[side] + (i + 1) * settings.distance_step[side];
 
     if (inRange(global_current_distance[side], range_start, range_end)) {
       if (i == 0) {
-        note = global_root_note[side];
+        note = settings.root_note[side];
       } else {
         uint8_t offset = getNoteOffset(side, i);
-        note = global_root_note[side] + offset;
+        note = settings.root_note[side] + offset;
       }
       global_note_index[side] = i;
       break;
@@ -59,17 +59,17 @@ void midi_note(uint8_t side) {
   }
 
   if (global_current_note[side] == -1) {
-    note_off(global_midi_channel[side], global_previous_note[side], global_velocity);
+    note_off(settings.midi_channel[side], global_previous_note[side], global_velocity);
 
     global_previous_note[side] = global_current_note[side];
 
     MidiUSB.flush();
   } else {
-    note_off(global_midi_channel[side], global_previous_note[side], global_velocity);
+    note_off(settings.midi_channel[side], global_previous_note[side], global_velocity);
 
     global_previous_note[side] = global_current_note[side];
 
-    note_on(global_midi_channel[side], global_current_note[side], global_velocity);
+    note_on(settings.midi_channel[side], global_current_note[side], global_velocity);
     MidiUSB.flush();
   }
 }
@@ -99,7 +99,7 @@ void midi_cc(uint8_t side, bool is_inverted) {
 
   if (global_previous_control_value[side] != global_current_control_value[side]) {
     global_previous_control_value[side] = global_current_control_value[side];
-    control_change(global_midi_channel[side], global_control_change[side], global_current_control_value[side]);
+    control_change(settings.midi_channel[side], settings.control_change[side], global_current_control_value[side]);
     MidiUSB.flush();  
   }
 }
@@ -115,14 +115,14 @@ void midi_velocity(uint8_t side, bool is_inverted) {
 }
 
 void loop_midi_left() {
-  if ((millis() - midi_timer[LEFT_SIDE]) < global_note_length[LEFT_SIDE]) {
+  if ((millis() - midi_timer[LEFT_SIDE]) < settings.note_length[LEFT_SIDE]) {
     return;
   }
 
   midi_timer[LEFT_SIDE] = millis();
   global_current_distance[LEFT_SIDE] = global_dynamic_distance[LEFT_SIDE];
 
-  switch(global_mode[LEFT_SIDE]) {
+  switch(settings.mode[LEFT_SIDE]) {
     case MODE_NOTE:
       midi_note(LEFT_SIDE);
       break;
@@ -142,14 +142,14 @@ void loop_midi_left() {
 }
 
 void loop_midi_right() {
-  if ((millis() - midi_timer[RIGHT_SIDE]) < global_note_length[RIGHT_SIDE]) {
+  if ((millis() - midi_timer[RIGHT_SIDE]) < settings.note_length[RIGHT_SIDE]) {
     return;
   }
 
   midi_timer[RIGHT_SIDE] = millis();
   global_current_distance[RIGHT_SIDE] = global_dynamic_distance[RIGHT_SIDE];
 
-  switch(global_mode[RIGHT_SIDE]) {
+  switch(settings.mode[RIGHT_SIDE]) {
     case MODE_NOTE:
       midi_note(RIGHT_SIDE);
       break;

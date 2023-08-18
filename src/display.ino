@@ -59,7 +59,7 @@ void render_top_bar() {
       display.setCursor(SCREEN_WIDTH - 6 * SCREEN_FONT_WIDTH, 0);
     }
 
-    switch(global_mode[i]) {
+    switch(settings.mode[i]) {
       case MODE_NOTE:
         display.print(F("N: "));
         display.print(get_note_name(global_current_note[i]));
@@ -79,7 +79,7 @@ void render_top_bar() {
   }
 
   display.setCursor((SCREEN_WIDTH / 2) - 15, 0);
-  display.print(global_side == LEFT_SIDE ? F("LEFT") : F("RIGHT"));
+  display.print(settings.side == LEFT_SIDE ? F("LEFT") : F("RIGHT"));
 
   display.println();
   display.println(F("---------------------"));
@@ -115,53 +115,104 @@ void render_row(int8_t row_index) {
     case MENU_NOTE_LENGTH: return render_row_note_length();
     case MENU_MIDI: return render_row_midi();
     case MENU_CC: return render_row_control_change();
+    case MENU_LOAD: return render_row_load();
+    case MENU_SAVE: return render_row_save();
+    case MENU_RESET: return render_row_reset();
+    case MENU_AUTO_LOAD_SETTINGS: return render_row_auto_load_settings();
   }
 }
 
 void render_row_side() {
   display.print(F("Side: "));
-  display.println(global_side == LEFT_SIDE ? F("Left") : F("Right"));
+  display.println(settings.side == LEFT_SIDE ? F("Left") : F("Right"));
 }
 
 void render_row_root_note() {
   display.print(F("Root note: "));
-  display.print(get_note_name(global_root_note[global_side]));
-  display.println(get_note_octave(global_root_note[global_side]));
+  display.print(get_note_name(settings.root_note[settings.side]));
+  display.println(get_note_octave(settings.root_note[settings.side]));
 }
 
 void render_row_scale() {
   display.print(F("Scale: "));
-  display.println(get_scale_name(global_current_scale_index[global_side]));
+  display.println(get_scale_name(settings.scale_index[settings.side]));
 }
 
 void render_row_mode() {
   display.print(F("Mode: "));
-  display.println(get_mode_name(global_mode[global_side]));
+  display.println(get_mode_name(settings.mode[settings.side]));
 }
 
 void render_row_notes() {
   display.print(F("Notes: "));
-  display.println(global_number_of_notes[global_side]);
+  display.println(settings.number_of_notes[settings.side]);
 }
 
 void render_row_distance_step() {
   display.print(F("Distance step: "));
-  display.println(global_distance_step[global_side]);
+  display.println(settings.distance_step[settings.side]);
 }
 
 void render_row_note_length() {
   display.print(F("Note length: "));
-  display.println(global_note_length[global_side]);
+  display.println(settings.note_length[settings.side]);
 }
 
 void render_row_midi() {
   display.print(F("MIDI Channel: "));
-  display.println(global_midi_channel[global_side]);
+  display.println(settings.midi_channel[settings.side]);
 }
 
 void render_row_control_change() {
   display.print(F("Control change: "));
-  display.println(global_control_change[global_side]);
+  display.println(settings.control_change[settings.side]);
+}
+
+void render_row_load() {
+  display.println(F("Load Settings"));
+}
+
+void render_row_save() {
+  display.println(F("Save Settings"));
+}
+
+void render_row_reset() {
+  display.println(F("Reset Settings"));
+}
+
+void render_row_auto_load_settings() {
+  display.print(F("Auto-Load: "));
+  display.println(settings.autoLoadSettings ? F("Yes") : F("No"));
+}
+
+void render_save_screen(){
+  clear_display();
+  display.setTextSize(2);
+  display.setCursor(10, 20);
+  display.println(F("Saving..."));
+  display.display();
+  display.setTextSize(1);
+  delay(1000);
+}
+
+void render_load_screen(){
+  clear_display();
+  display.setTextSize(2);
+  display.setCursor(5, 20);
+  display.println(F("Loading..."));
+  display.display();
+  display.setTextSize(1);
+  delay(1000);
+}
+
+void render_reset_screen(){
+  clear_display();
+  display.setTextSize(2);
+  display.setCursor(20, 20);
+  display.println(F("Reset..."));
+  display.display();
+  display.setTextSize(1);
+  delay(1000);
 }
 
 void render_init_screen() {
