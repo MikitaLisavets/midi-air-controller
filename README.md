@@ -1,4 +1,4 @@
-# MIDI Air Controller
+# X-Air MIDI Controller
 Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
 
 ## Features 
@@ -35,7 +35,7 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - Scale
   - Amount of notes in a scale
   - Range of a note in mm
-  - BPM and note duration
+  - Note length
   - MIDI and CC channels
 
 ### GUI settings
