@@ -19,7 +19,6 @@ void setup() {
   global_max_distance[LEFT_SIDE] = global_min_distance[LEFT_SIDE] + (settings.distance_step[LEFT_SIDE] * settings.number_of_notes[LEFT_SIDE]);
   global_max_distance[RIGHT_SIDE] = global_min_distance[RIGHT_SIDE] + (settings.distance_step[RIGHT_SIDE] * settings.number_of_notes[RIGHT_SIDE]);
 
-
   thread_display.onRun(loop_display);
   thread_midi_left.onRun(loop_midi_left);
   thread_midi_right.onRun(loop_midi_right);

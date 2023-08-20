@@ -70,12 +70,12 @@ void set_mode(int8_t mode) {
   settings.mode[settings.side] = mode % MAX_MODES;
 }
 
-void set_note_timeout(uint16_t note_timeout){
-  if (note_timeout <= 0) {
-    note_timeout = 0;
+void set_midi_interval(uint16_t midi_interval){
+  if (midi_interval <= 0) {
+    midi_interval = 0;
   }
 
-  settings.note_timeout[settings.side] = note_timeout;
+  settings.midi_interval[settings.side] = midi_interval;
 }
 
 void set_root_note(int8_t note) {
@@ -113,7 +113,7 @@ void reset_settings() {
     .root_note = {36, 24},
     .number_of_notes = {15, 8},
     .scale_index = {0, 0},
-    .note_timeout = {140, 140},
+    .midi_interval = {120, 120},
     .midi_channel = {0, 0},
     .control_change = {0, 1},
     .distance_step = {15, 30},

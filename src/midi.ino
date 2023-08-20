@@ -111,52 +111,34 @@ void midi_velocity(uint8_t side, bool is_inverted) {
   global_previous_velocity = global_velocity;
 }
 
-void loop_midi_left() {
-  bool isNoteActive = (millis() - midi_timer[LEFT_SIDE]) < settings.note_timeout[LEFT_SIDE];
+void process_midi(uint8_t side) {
+  if ( (millis() - midi_timer[side]) < settings.midi_interval[side] ) {
+    return;
+  }
 
-  switch(settings.mode[LEFT_SIDE]) {
+  midi_timer[side] = millis();
+  global_current_distance[side] = readSensor(side);
+
+  switch(settings.mode[side]) {
     case MODE_NOTE:
     case MODE_NOTE_INVERTED:
-      if (!isNoteActive) {
-        midi_timer[LEFT_SIDE] = millis();
-        global_current_distance[LEFT_SIDE] = readSensor(LEFT_SIDE);
-        midi_note(LEFT_SIDE, settings.mode[LEFT_SIDE] == MODE_NOTE_INVERTED);
-      }
+      midi_note(side, settings.mode[side] == MODE_NOTE_INVERTED);
       break;
     case MODE_CC:
     case MODE_CC_INVERTED:
-      global_current_distance[LEFT_SIDE] = readSensor(LEFT_SIDE);
-      midi_cc(LEFT_SIDE, settings.mode[LEFT_SIDE] == MODE_CC_INVERTED);
+      midi_cc(side, settings.mode[side] == MODE_CC_INVERTED);
       break;
     case MODE_VELOCITY:
     case MODE_VELOCITY_INVERTED:
-      global_current_distance[LEFT_SIDE] = readSensor(LEFT_SIDE);
-      midi_velocity(LEFT_SIDE, settings.mode[LEFT_SIDE] == MODE_VELOCITY_INVERTED);
+      midi_velocity(side, settings.mode[side] == MODE_VELOCITY_INVERTED);
       break;
   }
 }
 
-void loop_midi_right() {
-  bool isNoteActive = (millis() - midi_timer[RIGHT_SIDE]) < settings.note_timeout[RIGHT_SIDE];
+void loop_midi_left() {
+  process_midi(LEFT_SIDE);
+}
 
-  switch(settings.mode[RIGHT_SIDE]) {
-    case MODE_NOTE:
-    case MODE_NOTE_INVERTED:
-      if (!isNoteActive) {
-        midi_timer[RIGHT_SIDE] = millis();
-        global_current_distance[RIGHT_SIDE] = readSensor(RIGHT_SIDE);
-        midi_note(RIGHT_SIDE, settings.mode[RIGHT_SIDE] == MODE_NOTE_INVERTED);
-      }
-      break;
-    case MODE_CC:
-    case MODE_CC_INVERTED:
-      global_current_distance[RIGHT_SIDE] = readSensor(RIGHT_SIDE);
-      midi_cc(RIGHT_SIDE, settings.mode[RIGHT_SIDE] == MODE_CC_INVERTED);
-      break;
-    case MODE_VELOCITY:
-    case MODE_VELOCITY_INVERTED:
-      global_current_distance[RIGHT_SIDE] = readSensor(RIGHT_SIDE);
-      midi_velocity(RIGHT_SIDE, settings.mode[RIGHT_SIDE] == MODE_VELOCITY_INVERTED);
-      break;
-  }
+void loop_midi_right() {
+  process_midi(RIGHT_SIDE);
 }

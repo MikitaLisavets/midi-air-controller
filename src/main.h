@@ -16,7 +16,7 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define VERSION 1.07
+#define VERSION 1.08
 
 #define STR_ADDR 0
 
@@ -90,7 +90,7 @@ enum menu_t : uint8_t {
   MENU_SCALE,
   MENU_NOTES,
   MENU_DISTANCE_STEP,
-  MENU_NOTE_TIMEOUT,
+  MENU_MIDI_INTERVAL,
   MENU_MIDI,
   MENU_CC,
   MENU_LOAD,
@@ -108,7 +108,7 @@ struct Settings {
   uint8_t root_note[2];
   uint8_t number_of_notes[2];
   uint8_t scale_index[2];
-  uint16_t note_timeout[2];
+  uint16_t midi_interval[2];
   uint8_t midi_channel[2];
   uint8_t control_change[2];
   uint16_t distance_step[2];

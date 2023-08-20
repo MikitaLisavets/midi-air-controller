@@ -114,7 +114,7 @@ void render_row(int8_t row_index) {
     case MENU_MODE: return render_row_mode();
     case MENU_NOTES: return render_row_notes();
     case MENU_DISTANCE_STEP: return render_row_distance_step();
-    case MENU_NOTE_TIMEOUT: return render_row_note_timeout();
+    case MENU_MIDI_INTERVAL: return render_row_midi_interval();
     case MENU_MIDI: return render_row_midi();
     case MENU_CC: return render_row_control_change();
     case MENU_LOAD: return render_row_load();
@@ -155,9 +155,9 @@ void render_row_distance_step() {
   display.println(settings.distance_step[settings.side]);
 }
 
-void render_row_note_timeout() {
-  display.print(F("Note timeout: "));
-  display.println(settings.note_timeout[settings.side]);
+void render_row_midi_interval() {
+  display.print(F("MIDI Interval: "));
+  display.println(settings.midi_interval[settings.side]);
 }
 
 void render_row_midi() {

@@ -29,8 +29,8 @@ void handle_press_right() {
     case MENU_DISTANCE_STEP:
         set_distance_step(settings.distance_step[settings.side] + 5);
         break;
-    case MENU_NOTE_TIMEOUT:
-        set_note_timeout(settings.note_timeout[settings.side] + 10);
+    case MENU_MIDI_INTERVAL:
+        set_midi_interval(settings.midi_interval[settings.side] + 10);
         break;
     case MENU_MIDI:
         set_midi_channel(settings.midi_channel[settings.side] + 1);
@@ -78,8 +78,8 @@ void handle_press_left() {
     case MENU_DISTANCE_STEP:
         set_distance_step(settings.distance_step[settings.side] - 5);
         break;
-    case MENU_NOTE_TIMEOUT:
-        set_note_timeout(settings.note_timeout[settings.side] - 10);
+    case MENU_MIDI_INTERVAL:
+        set_midi_interval(settings.midi_interval[settings.side] - 10);
         break;
     case MENU_MIDI:
         set_midi_channel(settings.midi_channel[settings.side] - 1);

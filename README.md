@@ -37,7 +37,7 @@ Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
   - Scale
   - Amount of notes in a scale
   - Range of a note in mm
-  - Note timeout
+  - MIDI interval
   - MIDI and CC channels
   - Save/Load settings
 
