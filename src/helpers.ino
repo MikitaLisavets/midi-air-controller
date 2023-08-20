@@ -109,11 +109,11 @@ void save_settings() {
 void reset_settings() {
   settings = {
     .side = LEFT_SIDE,
-    .mode = {0, 3},
+    .mode = {0, 4},
     .root_note = {36, 24},
     .number_of_notes = {15, 8},
     .scale_index = {0, 0},
-    .note_timeout = {120, 120},
+    .note_timeout = {140, 140},
     .midi_channel = {0, 0},
     .control_change = {0, 1},
     .distance_step = {15, 30},

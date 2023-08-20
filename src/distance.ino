@@ -12,19 +12,18 @@ void setup_distance(){
   pinMode(VL53L0X_LEFT_PIN, INPUT);
   sensor_left.init(true);
   sensor_left.setAddress(VL53L0X_LEFT_ADDRESS);
+  sensor_left.setMeasurementTimingBudget(20000);
 
   pinMode(VL53L0X_RIGHT_PIN, INPUT);
   sensor_right.init(true);
   sensor_right.setAddress(VL53L0X_RIGHT_ADDRESS);
-
-  sensor_left.setMeasurementTimingBudget(20000);
   sensor_right.setMeasurementTimingBudget(20000);
 }
 
-void loop_distance_left() {
-  global_dynamic_distance[LEFT_SIDE] = sensor_left.readRangeSingleMillimeters();
-}
-
-void loop_distance_right() {
-  global_dynamic_distance[RIGHT_SIDE] = sensor_right.readRangeSingleMillimeters();
+uint16_t readSensor(uint8_t side) {
+  if (side == LEFT_SIDE) {
+    return sensor_left.readRangeSingleMillimeters();
+  } else {
+    return sensor_right.readRangeSingleMillimeters();
+  }
 }

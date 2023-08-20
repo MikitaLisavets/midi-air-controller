@@ -14,7 +14,7 @@ VL53L0X sensor_left;
 VL53L0X sensor_right;
 
 void setup_distance();
-void loop_distance_left();
-void loop_distance_right();
+
+uint16_t readSensor(uint8_t side);
 
 #endif

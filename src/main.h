@@ -16,13 +16,11 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define VERSION 1.06
+#define VERSION 1.07
 
 #define STR_ADDR 0
 
 Thread thread_display;
-Thread thread_distance_left;
-Thread thread_distance_right;
 Thread thread_midi_left;
 Thread thread_midi_right;
 Thread thread_controls;
@@ -66,7 +64,7 @@ const scale_t SCALES[] PROGMEM = {
 const uint8_t MIDI_MIN = 0;
 const uint8_t MIDI_MAX = 128;
 const uint8_t DEFAULT_VELOCITY = 64;
-const uint8_t MAX_MODES = 5;
+const uint8_t MAX_MODES = 6;
 const uint8_t MAX_MENU_ROWS = 13;
 const uint8_t NUMBER_OF_SCALES = ARRAY_SIZE(SCALES);
 const uint8_t LEFT_SIDE = 0;
