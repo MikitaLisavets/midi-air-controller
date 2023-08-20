@@ -113,7 +113,7 @@ void reset_settings() {
     .root_note = {36, 24},
     .number_of_notes = {15, 8},
     .scale_index = {0, 0},
-    .midi_interval = {120, 120},
+    .midi_interval = {140, 140},
     .midi_channel = {0, 0},
     .control_change = {0, 1},
     .distance_step = {15, 30},
