@@ -38,6 +38,7 @@ int8_t get_note_octave(int8_t note) {
 const char* get_mode_name(int8_t mode) {
   switch(mode) {
     case MODE_NOTE: return "Note";
+    case MODE_NOTE_INVERTED: return "Note (Inv)";
     case MODE_CC: return "CC";
     case MODE_CC_INVERTED: return "CC (Inv)";
     case MODE_VELOCITY: return "Velocity";
@@ -61,6 +62,7 @@ void render_top_bar() {
 
     switch(settings.mode[i]) {
       case MODE_NOTE:
+      case MODE_NOTE_INVERTED:
         display.print(F("N: "));
         display.print(get_note_name(global_current_note[i]));
         display.print(get_note_octave(global_current_note[i]));
@@ -192,7 +194,7 @@ void render_save_screen(){
   display.println(F("Saving..."));
   display.display();
   display.setTextSize(1);
-  delay(1000);
+  delay(300);
 }
 
 void render_load_screen(){
@@ -202,7 +204,7 @@ void render_load_screen(){
   display.println(F("Loading..."));
   display.display();
   display.setTextSize(1);
-  delay(1000);
+  delay(300);
 }
 
 void render_reset_screen(){
@@ -212,7 +214,7 @@ void render_reset_screen(){
   display.println(F("Reset..."));
   display.display();
   display.setTextSize(1);
-  delay(1000);
+  delay(300);
 }
 
 void render_init_screen() {
@@ -225,19 +227,19 @@ void render_init_screen() {
   display.setCursor(30, 20);
   display.print(F("X"));
   display.display();
-  delay(100);
+  delay(50);
   display.print(F("-"));
   display.display();
-  delay(100);
+  delay(50);
   display.print(F("A"));
   display.display();
-  delay(100);
+  delay(50);
   display.print(F("i"));
   display.display();
-  delay(100);
+  delay(50);
   display.print(F("r"));
   display.display();
-  delay(1000);
+  delay(300);
 
   clear_display();
 }

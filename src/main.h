@@ -16,7 +16,7 @@
 
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
 
-#define VERSION 1.05
+#define VERSION 1.06
 
 #define STR_ADDR 0
 
@@ -76,6 +76,7 @@ const uint8_t RIGHT_SIDE = 1;
 // === Modes ===
 enum mode_t : uint8_t {
   MODE_NOTE = 0,
+  MODE_NOTE_INVERTED,
   MODE_CC,
   MODE_CC_INVERTED,
   MODE_VELOCITY,

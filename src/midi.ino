@@ -28,20 +28,24 @@ uint8_t getNoteOffset(uint8_t side, uint8_t note_index) {
   return offset;
 } 
 
-uint8_t get_note(uint8_t side) {
+uint8_t get_note(uint8_t side, bool is_inverted) {
   int8_t note = global_previous_note[side];
+  uint8_t offset;
 
   for (uint8_t i = 0; i < settings.number_of_notes[side]; i++) {
     int range_start = global_min_distance[side] + i * settings.distance_step[side];
     int range_end = global_min_distance[side] + (i + 1) * settings.distance_step[side];
 
     if (inRange(global_current_distance[side], range_start, range_end)) {
-      if (i == 0) {
-        note = settings.root_note[side];
-      } else {
-        uint8_t offset = getNoteOffset(side, i);
-        note = settings.root_note[side] + offset;
-      }
+      offset = getNoteOffset(side, is_inverted ? (settings.number_of_notes[side] - 1) - i: i);
+      note = settings.root_note[side] + offset;
+
+      // if (i == 0) {
+      //   note = settings.root_note[side];
+      // } else {
+      //   uint8_t offset = getNoteOffset(side, i);
+      //   note = settings.root_note[side] + offset;
+      // }
       global_note_index[side] = i;
       break;
     } else {
@@ -51,8 +55,8 @@ uint8_t get_note(uint8_t side) {
   return note;
 }
 
-void midi_note(uint8_t side) {
-  global_current_note[side] = get_note(side);
+void midi_note(uint8_t side, bool is_inverted) {
+  global_current_note[side] = get_note(side, is_inverted);
 
   if (global_previous_note[side] == global_current_note[side]) {
     return;
@@ -122,7 +126,13 @@ void loop_midi_left() {
   switch(settings.mode[LEFT_SIDE]) {
     case MODE_NOTE:
       if (!isNoteActive) {
-        midi_note(LEFT_SIDE);
+        midi_note(LEFT_SIDE, false);
+        midi_timer[LEFT_SIDE] = millis();
+      }
+      break;
+    case MODE_NOTE_INVERTED:
+      if (!isNoteActive) {
+        midi_note(LEFT_SIDE, true);
         midi_timer[LEFT_SIDE] = millis();
       }
       break;
@@ -149,7 +159,13 @@ void loop_midi_right() {
   switch(settings.mode[RIGHT_SIDE]) {
     case MODE_NOTE:
       if (!isNoteActive) {
-        midi_note(RIGHT_SIDE);
+        midi_note(RIGHT_SIDE, false);
+        midi_timer[RIGHT_SIDE] = millis();
+      }
+      break;
+    case MODE_NOTE_INVERTED:
+      if (!isNoteActive) {
+        midi_note(RIGHT_SIDE, true);
         midi_timer[RIGHT_SIDE] = millis();
       }
       break;
