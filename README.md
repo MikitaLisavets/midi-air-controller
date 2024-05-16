@@ -1,6 +1,8 @@
 # X-Air MIDI Controller
 Arduino MIDIUSB controller with 2 VL53L0X sensors and OLED Screen
 
+Video review and demo: https://www.youtube.com/watch?v=o5j83KUeg0Q
+
 ## Features 
 ### 24 musical scales:
   - "Major"
